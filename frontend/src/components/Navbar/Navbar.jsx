@@ -1,19 +1,16 @@
-import {FaSearch, FaUserCircle} from "react-icons/fa"
+import {FaSearch, FaUserCircle,FaBell} from "react-icons/fa"
 
 const Navbar = (props) => {
   return (
-    <nav className="navbar">
-      <div className="left-side">
-        <h2>BillPro</h2>
-      </div>
-      <div className="right-side">
-        <div className="search-box">
-          <FaSearch className="search-icon" />
-          <input type="text" placeholder="Search" />
+    <nav className="flex justify-between items-center h-16 px-6 bg-white border-b ">
+      <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 gap-2 w-72 ">
+        <FaSearch  className="text-gray-500"/>
+        <input type="text" placeholder="Search" className="outline-none bg-transparent w-full" />
         </div>
-        <div className="profile">
-          <FaUserCircle className="profile-icon" />
-        </div>
+      <div className="flex gap-5 items-center">
+        <FaBell className="text-gray-600 cursor-pointer"/>
+        <FaUserCircle  className="text-2xl text-gray-700 cursor-pointer"/>
+        <span>Geeta</span>
       </div>
     </nav>
   )
