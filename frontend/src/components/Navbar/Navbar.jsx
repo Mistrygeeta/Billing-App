@@ -2,8 +2,8 @@ import {FaSearch, FaUserCircle,FaBell} from "react-icons/fa"
 
 const Navbar = (props) => {
   return (
-    <nav className="flex justify-between items-center h-16 px-6 bg-white border-b ">
-      <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 gap-2 w-72 ">
+    <nav className="flex justify-between items-center h-13 px-8 bg-white border-b ">
+      <div className="flex items-center bg-gray-100 rounded-lg px-3 py-1 gap-2 w-72 ">
         <FaSearch  className="text-gray-500"/>
         <input type="text" placeholder="Search" className="outline-none bg-transparent w-full" />
         </div>
