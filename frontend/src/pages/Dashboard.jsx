@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar/Navbar';
 import StatCard from '../components/Dashboard/StatCard';
 import { FaBox,FaUsers, FaFileInvoiceDollar, FaRupeeSign } from 'react-icons/fa';
 import RecentBills from '../components/Dashboard/RecentBills';
+import RecentActivity from '../components/Dashboard/RecentActivity';
 
 const Dashboard = () => {
   return (
@@ -27,7 +28,14 @@ const Dashboard = () => {
           <StatCard title="Bills" value ="500" icon ={<FaFileInvoiceDollar />} />
           <StatCard  title="Revenue" value= "INR 50,000" icon= {<FaRupeeSign />} />
         </div>
-        <RecentBills/>
+        <div className='grid grid-cols-3 gap-6 mt-6 '>
+          <div className='col-span-2'>
+            <RecentBills />
+          </div>
+          <div>
+            <RecentActivity />
+          </div>
+        </div>
       </div>
     </div>
     </div>

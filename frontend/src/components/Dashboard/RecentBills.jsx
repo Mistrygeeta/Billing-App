@@ -2,7 +2,7 @@ import React from 'react'
 
 const RecentBills = () => {
   return (
-    <div className='bg-white mt-6 shadow-md p-6 rounded-xl'>
+    <div className='bg-white shadow-md p-6 rounded-xl'>
       <h2 className='text-xl font-semibold mb-4'>Recent Bills</h2>
       <table className='w-full'>
         <thead className='bg-gray-50'>
