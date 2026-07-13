@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar/Sidebar'
 import Navbar from '../components/Navbar/Navbar';
 import StatCard from '../components/Dashboard/StatCard';
 import { FaBox,FaUsers, FaFileInvoiceDollar, FaRupeeSign } from 'react-icons/fa';
+import RecentBills from '../components/Dashboard/RecentBills';
 
 const Dashboard = () => {
   return (
@@ -26,6 +27,7 @@ const Dashboard = () => {
           <StatCard title="Bills" value ="500" icon ={<FaFileInvoiceDollar />} />
           <StatCard  title="Revenue" value= "INR 50,000" icon= {<FaRupeeSign />} />
         </div>
+        <RecentBills/>
       </div>
     </div>
     </div>
