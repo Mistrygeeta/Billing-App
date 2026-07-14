@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Login = () => {
@@ -60,8 +60,29 @@ const Login = () => {
        </div>
        </div>
        </div>
-       <div className="w-1/2">
-        right section
+       <div className="w-1/2 flex justify-center items-center ">
+        <div className="bg-white rounded-2xl shadow-2xl p-10 w-[420px]">
+            <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
+            <p className="text-gray-500 mt-2">Sign in to continue to BillPro</p>
+        <div className="mt-10">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 ">Email</label>
+          <input type="email" id="email" placeholder="Enter your email" value={email} onChange={handleEmailChange}
+          className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-slate-900" />
+        </div>
+        <div className="mt-6">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" value={password} onChange={handlePasswordChange} 
+          className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-slate-900"/>
+        </div>
+        <div className="flex justify-between items-center mt-4">
+          <div className="flex items-center gap-2" >
+            <input type="checkbox" id="remember"className="w-4 h-4 " />
+            <label htmlFor="remember" className="text-sm text-gray-600">Remember Me</label>
+          </div>
+          <Link to="/forgot-password" className="text-sm text-slate-900 font-medium hover:underline">Forgot Password?</Link>
+        </div>
+        <button onClick={handleLogin} className="w-full bg-slate-900 text-white py-3 rounded-lg font-semibold mt-6 hover:bg-slate-700 transition duration-300">Login</button>
+        </div>
     </div>
     </div>
   )
