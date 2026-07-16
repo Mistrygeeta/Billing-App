@@ -1,36 +1,44 @@
 import { useState } from "react";
-import { FaCheckCircle, FaEnvelope,FaLock,FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaCheckCircle, FaEnvelope,FaLock,FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
 
-const Login = () => {
+const Signup = () => {
+  const [name, setName] = useState("")
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const handleNameChange = (event)=>{
+        setName(event.target.value)
+    };
 
     const handleEmailChange = (event)=>{
         setEmail(event.target.value)
-    }
+    };
 
     const handlePasswordChange = (event)=>{
         setPassword(event.target.value)
-    }
+    };
 
-    const handleLogin = ()=>{
-      if (email === "" && password ==="") {
-        alert("email and password are required")
+    const handleSignup = ()=>{
+      if (name === "" && email === "" && password ==="") {
+        alert("All fields are required")
+      }else if(name===""){
+        alert ("name is required")
       }else if(email === ""){
         alert ("email is required")
       }else if(password === ""){
         alert("password is required")
       }else {
-       console.log("Login succesful");
-       console.log("email :", email);
-       console.log("password :", password);
+        console.log("Signup succesful");
+        console.log("name :", name);
+        console.log("email :", email);
+        console.log("password :", password);
 
-       navigate("/dashboard");
+        navigate("/login")
       }
     }
   return (
@@ -60,8 +68,16 @@ const Login = () => {
        </div>
        <div className="w-1/2 flex justify-center items-center ">
         <div className="bg-white rounded-2xl shadow-2xl p-10 w-[460px]">
-            <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
-            <p className="text-gray-500 mt-2">Sign in to continue to BillPro</p>
+            <h2 className="text-3xl font-bold text-gray-800">Create Account</h2>
+            <p className="text-gray-500 mt-2">Create your BillPro account</p>
+        <div className="mt-10">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 ">Full Name</label>
+          <div className="relative">
+            <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input type="text" id="name" placeholder="Enter your name" value={name} onChange={handleNameChange}
+            className="w-full border border-gray-300 rounded-lg py-3 pl-12 pr-4 outline-none focus:ring-2 focus:ring-slate-900" />
+          </div>
+        </div>
         <div className="mt-10">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 ">Email</label>
           <div className="relative">
@@ -81,17 +97,11 @@ const Login = () => {
           <FaEye onClick={()=> setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer" />)}
         </div>
         </div>
-        <div className="flex justify-between items-center mt-4">
-          <div className="flex items-center gap-2" >
-            <input type="checkbox" id="remember"className="w-4 h-4 " />
-            <label htmlFor="remember" className="text-sm text-gray-600">Remember Me</label>
-          </div>
-          <Link to="/forgot-password" className="text-sm text-slate-900 font-medium hover:underline">Forgot Password?</Link>
-        </div>
-        <button onClick={handleLogin} className="w-full bg-slate-900 text-white py-3 rounded-lg font-semibold mt-6 hover:bg-slate-700 hover:scale-[1.02] transition duration-300">Login</button>
+        
+        <button onClick={handleSignup} className="w-full bg-slate-900 text-white py-3 rounded-lg font-semibold mt-6 hover:bg-slate-700 hover:scale-[1.02] shadow-md transition duration-300">Create Account</button>
         <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600">Don't have an account?{" "} 
-            <Link to="/signup" className="text-slate-900 font-semibold hover:underline">Sign Up</Link> </p>
+          <p className="text-sm text-gray-600">Already have an account?{" "} 
+            <Link to="/login" className="text-slate-900 font-semibold hover:underline">Login</Link> </p>
         </div>
         </div>
         
@@ -100,4 +110,4 @@ const Login = () => {
   )
 }
 
-export default Login;
+export default Signup;
