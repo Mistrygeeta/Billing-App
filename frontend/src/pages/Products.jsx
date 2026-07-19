@@ -30,7 +30,8 @@ const Products = () => {
   ];
 
   const filteredProducts = products.filter((product)=>
-  product.name.toLowerCase().includes(search.toLowerCase())
+  product.name.toLowerCase().includes(search.toLowerCase()) ||
+  product.category.toLowerCase().includes(search.toLowerCase())
   )
   return (
     <div className='p-8'>
@@ -59,12 +60,18 @@ const Products = () => {
           </thead>
 
           <tbody>
-            {products.map((product, index) =>(
+            {filteredProducts.length > 0 ?(filteredProducts.map((product, index) =>(
             <tr key={index} className="border-b hover:bg-gray-50 transition">
              <td className="p-3 text-gray-700">{product.name}</td>
              <td className="p-3 text-gray-700">{product.category}</td>
              <td className="p-3 text-gray-700">{product.price} </td>
-             <td className="p-3 text-gray-700">{product.stock} </td>
+             <td className="p-3 ">{product.stock>10 ?(
+              <span className='bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium '>{product.stock} In Stock</span>
+             ): product.stock>0 ?(
+              <span className='bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-medium'>{product.stock} Low Stock</span>
+             ):(
+              <span className='bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium'>Out of Stock</span>
+             )} </td>
              <td className="p-3">
               <div className="flex gap-2">
                  <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition">
@@ -76,7 +83,13 @@ const Products = () => {
                     </div>
                      </td>
                      </tr>
-                     ))}
+                     ))
+                    ):(
+                      <tr>
+                        <td colSpan="5" className='text-center py-8 text-gray-500 font-medium'>No Products Found</td>
+                      </tr>
+                    )}
+            
                     </tbody>
                     </table>
     </div>
