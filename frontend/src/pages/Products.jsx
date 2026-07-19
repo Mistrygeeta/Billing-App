@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
+import Navbar from '../components/Navbar/Navbar';
+import Sidebar from '../components/Sidebar/Sidebar';
 import {FaPlus, FaSearch} from 'react-icons/fa'
+
 const Products = () => {
   const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const products =[
      {
     name: "Sample Product",
@@ -34,6 +38,10 @@ const Products = () => {
   product.category.toLowerCase().includes(search.toLowerCase())
   )
   return (
+    <div className='min-h-screen bg-gray-100 flex' >
+      <Sidebar/>
+      <div className='flex-1 flex flex-col'>
+        <Navbar/>
     <div className='p-8'>
         <h1 className='text-3xl font-bold text-slate-900'>Products</h1>
         <p className='text-gray-500 mt-1'>Manage all your products here.</p>
@@ -42,7 +50,7 @@ const Products = () => {
             <FaSearch className='absolute top-1/2 left-3 -translate-y-1/2 text-gray-400'/>
           <input type="text" placeholder='Search Product'value={search} onChange={(e)=>setSearch(e.target.value)} className='border border-gray-300 py-2 pl-10 pr-4 w-80 rounded-lg outline-none' />
           </div>
-          <button className=' bg-slate-900 text-white rounded-lg px-5 py-2 cursor-pointer flex items-center gap-2 hover:bg-slate-700 transition'>
+          <button onClick={()=>setShowModal(true)} className=' bg-slate-900 text-white rounded-lg px-5 py-2 cursor-pointer flex items-center gap-2 hover:bg-slate-700 transition'>
             <FaPlus/>
             <span>Add Product</span>
           </button>
@@ -93,6 +101,47 @@ const Products = () => {
                     </tbody>
                     </table>
     </div>
+     </div>
+     </div>
+     {showModal && (
+      <div className='fixed inset-0 bg-black/40 flex justify-center items-center'>
+        <div className='bg-white rounded-xl p-6 w-[500px] shadow-xl max-h-[90vh] overflow-y-auto'>
+          <h2 className='text-2xl font-bold text-slate-900'>Add Product</h2>
+          <p className='text-gray-500 mt-2'>Enter product details</p>
+          <div className='mt-6'>
+            <label className='block text-sm font-medium mb-2 text-gray-700'>Product Name</label>
+            <input type="text" placeholder='Enter product name' className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900' />
+          </div>
+          <div className='mt-4'>
+            <label className='block text-sm font-medium mb-2 text-gray-700'>Category</label>
+            <select className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'>
+              <option value="">Select Category</option>
+              <option value="Grocery">Grocery</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Stationary">Stationary</option>
+              <option value="Accessories">Accessories</option>
+            </select>
+          </div>
+          <div className='mt-4'>
+            <label className='block text-sm font-medium mb-2 text-gray-700'>Price</label>
+            <input type="number" min="0" placeholder='Enter price' className='w-full border border-gray-300 px-4 py-2 rounded-lg outline-none focus:border-slate-900' />
+          </div>
+          <div className='mt-4'>
+            <label className='block text-sm font-medium mb-2 text-gray-700'>Stock</label>
+            <input type="number" min="0" placeholder='Enter stock quantity' className='w-full border border-gray-300 px-4 py-2 rounded-lg outline-none focus:border-slate-900'/>
+          </div>
+          <div className='flex justify-end gap-3 mt-6'>
+            <button onClick={()=>setShowModal(false)} 
+            className=' px-4 py-2 border border-red-500 text-red-700 rounded-lg hover:bg-red-500 hover:text-white transition cursor-pointer'>
+              Cancel
+            </button>
+            <button className='bg-slate-900 text-white rounded-lg px-4 py-2 hover:bg-slate-700 transition cursor-pointer'>
+              Add Product
+              </button>
+          </div>
+        </div>
+      </div>
+     )}
      </div>
   );
 };

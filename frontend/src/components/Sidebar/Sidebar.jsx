@@ -1,6 +1,6 @@
 import {FaBox,FaUsers,FaFileInvoiceDollar,FaChartBar,FaCog, FaSignOutAlt} from 'react-icons/fa'
 import { MdDashboard } from "react-icons/md";
-
+import {Link} from "react-router-dom"
 const Sidebar = () => {
   return (
     <div className='w-60 h-screen bg-slate-900 text-white flex flex-col'>
@@ -10,13 +10,17 @@ const Sidebar = () => {
         </div>
         <div className='px-3 font-medium'>
             <ul >
-                <li className='flex items-center gap-2 mt-4  px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg '>
+                <li >
+                    <Link to="/dashboard" className='flex items-center gap-2 mt-4  px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg '>
                     <MdDashboard />
                     Dashboard
-                </li>   
-                <li className='flex items-center gap-2  px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg'>
+                    </Link>
+                </li>
+                <li >
+                    <Link to="/products" className='flex items-center gap-2  px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg'>
                     <FaBox />
                     Products
+                    </Link>
                 </li>
                 <li className='flex items-center gap-2 px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg'>
                     <FaUsers />
