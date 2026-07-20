@@ -6,6 +6,7 @@ import {FaPlus, FaSearch} from 'react-icons/fa'
 const Products = () => {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [editIndex, setEditIndex] = useState(null)
   const [productData, setProductData] = useState({
     name: "",
     category: "",
@@ -45,7 +46,7 @@ setProductData({
 });
 };
 
-const handleAddProduct =()=>{
+const handleSubmitProduct =()=>{
   if(
     !productData.name|| !productData.category || !productData.price || !productData.stock
   ){
@@ -58,7 +59,14 @@ const handleAddProduct =()=>{
     price: `INR ${productData.price}`,
     stock: Number(productData.stock),
   };
-  setProducts([...products,newProduct]);
+  if (editIndex !== null) {
+    const updatedProducts = [...products];
+    updatedProducts[editIndex]= newProduct;
+    setProducts(updatedProducts);
+    setEditIndex(null)
+  } else {
+    setProducts([...products, newProduct])
+  };
 
   setProductData({
     name: "",
@@ -70,10 +78,31 @@ const handleAddProduct =()=>{
 };
 
 const handleDeleteProduct = (index)=>{
-  const updatedproducts = products.filter((_, i)=> i !== index);
-  setProducts(updatedproducts);
+  const updatedProducts = products.filter((_, i)=> i !== index);
+  setProducts(updatedProducts);
 };
 
+const handleEditProduct = (index)=>{
+setProductData({
+  name: products[index].name,
+  category: products[index].category,
+  price: products[index].price.replace("INR", "").trim(),
+  stock: products[index].stock
+});
+
+setEditIndex(index);
+setShowModal(true);
+};
+
+const resetForm = ()=>{
+  setEditIndex(null);
+  setProductData({
+    name: "",
+    category: "",
+    price: "",
+    stock: "",
+  });
+}
   const filteredProducts = products.filter((product)=>
   product.name.toLowerCase().includes(search.toLowerCase()) ||
   product.category.toLowerCase().includes(search.toLowerCase())
@@ -91,7 +120,10 @@ const handleDeleteProduct = (index)=>{
             <FaSearch className='absolute top-1/2 left-3 -translate-y-1/2 text-gray-400'/>
           <input type="text" placeholder='Search Product'value={search} onChange={(e)=>setSearch(e.target.value)} className='border border-gray-300 py-2 pl-10 pr-4 w-80 rounded-lg outline-none' />
           </div>
-          <button onClick={()=>setShowModal(true)} className=' bg-slate-900 text-white rounded-lg px-5 py-2 cursor-pointer flex items-center gap-2 hover:bg-slate-700 transition'>
+          <button onClick={()=>{
+            resetForm();
+            setShowModal(true);
+          }} className=' bg-slate-900 text-white rounded-lg px-5 py-2 cursor-pointer flex items-center gap-2 hover:bg-slate-700 transition'>
             <FaPlus/>
             <span>Add Product</span>
           </button>
@@ -123,7 +155,7 @@ const handleDeleteProduct = (index)=>{
              )} </td>
              <td className="p-3">
               <div className="flex gap-2">
-                 <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition">
+                 <button onClick={()=>handleEditProduct(index)} className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition">
                   Edit
                   </button>
                   <button onClick={()=> handleDeleteProduct(index)} className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
@@ -147,7 +179,7 @@ const handleDeleteProduct = (index)=>{
      {showModal && (
       <div className='fixed inset-0 bg-black/40 flex justify-center items-center'>
         <div className='bg-white rounded-xl p-6 w-[500px] shadow-xl max-h-[90vh] overflow-y-auto'>
-          <h2 className='text-2xl font-bold text-slate-900'>Add Product</h2>
+          <h2 className='text-2xl font-bold text-slate-900'>{editIndex !== null? "Edit Product" : "Add Product"}</h2>
           <p className='text-gray-500 mt-2'>Enter product details</p>
           <div className='mt-6'>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Product Name</label>
@@ -176,13 +208,16 @@ const handleDeleteProduct = (index)=>{
             className='w-full border border-gray-300 px-4 py-2 rounded-lg outline-none focus:border-slate-900'/>
           </div>
           <div className='flex justify-end gap-3 mt-6'>
-            <button onClick={()=>setShowModal(false)} 
+            <button onClick={()=>{
+              resetForm();
+              setShowModal(false);
+            }} 
             className=' px-4 py-2 border border-red-500 text-red-700 rounded-lg hover:bg-red-500 hover:text-white transition cursor-pointer'>
               Cancel
             </button>
-            <button onClick={handleAddProduct}
+            <button onClick={handleSubmitProduct}
             className='bg-slate-900 text-white rounded-lg px-4 py-2 hover:bg-slate-700 transition cursor-pointer'>
-              Add Product
+              {editIndex !==null? "Update Product":"Add Product"}
               </button>
           </div>
         </div>
