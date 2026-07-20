@@ -6,7 +6,13 @@ import {FaPlus, FaSearch} from 'react-icons/fa'
 const Products = () => {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const products =[
+  const [productData, setProductData] = useState({
+    name: "",
+    category: "",
+    price: "",
+    stock: "",
+  });
+  const [products, setProducts] = useState([
      {
     name: "Sample Product",
     category: "Electronics",
@@ -31,7 +37,42 @@ const Products = () => {
     price: "INR 1200",
     stock: 15,
   },
-  ];
+  ])
+  
+const handleChange =(e)=>{
+setProductData({
+  ...productData,[e.target.name]: e.target.value,
+});
+};
+
+const handleAddProduct =()=>{
+  if(
+    !productData.name|| !productData.category || !productData.price || !productData.stock
+  ){
+    alert("please fill all the fields")
+    return;
+  }
+  const newProduct ={
+    name: productData.name,
+    category: productData.category,
+    price: `INR ${productData.price}`,
+    stock: Number(productData.stock),
+  };
+  setProducts([...products,newProduct]);
+
+  setProductData({
+    name: "",
+    category: "",
+    price: "",
+    stock: "",
+  })
+  setShowModal(false)
+};
+
+const handleDeleteProduct = (index)=>{
+  const updatedproducts = products.filter((_, i)=> i !== index);
+  setProducts(updatedproducts);
+};
 
   const filteredProducts = products.filter((product)=>
   product.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -85,7 +126,7 @@ const Products = () => {
                  <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition">
                   Edit
                   </button>
-                  <button className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
+                  <button onClick={()=> handleDeleteProduct(index)} className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
                     Delete
                     </button>
                     </div>
@@ -110,11 +151,13 @@ const Products = () => {
           <p className='text-gray-500 mt-2'>Enter product details</p>
           <div className='mt-6'>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Product Name</label>
-            <input type="text" placeholder='Enter product name' className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900' />
+            <input type="text" name='name' value={productData.name} onChange={handleChange} placeholder='Enter product name' 
+            className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900' />
           </div>
           <div className='mt-4'>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Category</label>
-            <select className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'>
+            <select name='category' value={productData.category} onChange={handleChange}
+            className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'>
               <option value="">Select Category</option>
               <option value="Grocery">Grocery</option>
               <option value="Electronics">Electronics</option>
@@ -124,18 +167,21 @@ const Products = () => {
           </div>
           <div className='mt-4'>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Price</label>
-            <input type="number" min="0" placeholder='Enter price' className='w-full border border-gray-300 px-4 py-2 rounded-lg outline-none focus:border-slate-900' />
+            <input type="number" min="0" name='price' value={productData.price} onChange={handleChange} placeholder='Enter price' 
+            className='w-full border border-gray-300 px-4 py-2 rounded-lg outline-none focus:border-slate-900' />
           </div>
           <div className='mt-4'>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Stock</label>
-            <input type="number" min="0" placeholder='Enter stock quantity' className='w-full border border-gray-300 px-4 py-2 rounded-lg outline-none focus:border-slate-900'/>
+            <input type="number" min="0" name='stock' value={productData.stock} onChange={handleChange} placeholder='Enter stock quantity' 
+            className='w-full border border-gray-300 px-4 py-2 rounded-lg outline-none focus:border-slate-900'/>
           </div>
           <div className='flex justify-end gap-3 mt-6'>
             <button onClick={()=>setShowModal(false)} 
             className=' px-4 py-2 border border-red-500 text-red-700 rounded-lg hover:bg-red-500 hover:text-white transition cursor-pointer'>
               Cancel
             </button>
-            <button className='bg-slate-900 text-white rounded-lg px-4 py-2 hover:bg-slate-700 transition cursor-pointer'>
+            <button onClick={handleAddProduct}
+            className='bg-slate-900 text-white rounded-lg px-4 py-2 hover:bg-slate-700 transition cursor-pointer'>
               Add Product
               </button>
           </div>
