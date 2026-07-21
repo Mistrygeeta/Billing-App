@@ -7,6 +7,9 @@ const Products = () => {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState(null)
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(null);
+
   const [productData, setProductData] = useState({
     name: "",
     category: "",
@@ -78,9 +81,21 @@ const handleSubmitProduct =()=>{
 };
 
 const handleDeleteProduct = (index)=>{
-  const updatedProducts = products.filter((_, i)=> i !== index);
-  setProducts(updatedProducts);
+  setDeleteIndex(index);
+  setShowDeleteModal(true);
 };
+
+const confirmDeleteProduct =()=>{
+  const updatedProducts = products.filter((_, i) => i !== deleteIndex );
+  setProducts(updatedProducts);
+  setDeleteIndex(null);
+  setShowDeleteModal(false);
+};
+
+const cancelDelete = ()=>{
+  setDeleteIndex(null);
+  setShowDeleteModal(false);
+}
 
 const handleEditProduct = (index)=>{
 setProductData({
@@ -154,7 +169,7 @@ const resetForm = ()=>{
               <span className='bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium'>Out of Stock</span>
              )} </td>
              <td className="p-3">
-              <div className="flex gap-2">
+              <div className="flex gap-4">
                  <button onClick={()=>handleEditProduct(index)} className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition">
                   Edit
                   </button>
@@ -219,6 +234,20 @@ const resetForm = ()=>{
             className='bg-slate-900 text-white rounded-lg px-4 py-2 hover:bg-slate-700 transition cursor-pointer'>
               {editIndex !==null? "Update Product":"Add Product"}
               </button>
+          </div>
+        </div>
+      </div>
+     )}
+     {showDeleteModal && (
+      <div className='fixed inset-0 bg-black/40 flex justify-center items-center'>
+        <div className='w-[400px] bg-white rounded-xl p-8 shadow-xl'>
+          <h2 className='text-2xl text-red-500 font-bold'>Delete Product</h2>
+          <p className='text-gray-800 mt-4 text-center'>Are you sure you want to delete this product?</p>
+          <div className='flex justify-end gap-5 mt-8'>
+            <button onClick={cancelDelete} className='border border-gray-400 px-4 py-2 rounded-lg hover:bg-gray-100 cursor-pointer'>
+              Cancel
+              </button>
+            <button onClick={confirmDeleteProduct} className='bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 cursor-pointer'>Delete</button>
           </div>
         </div>
       </div>
