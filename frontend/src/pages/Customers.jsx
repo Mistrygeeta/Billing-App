@@ -34,6 +34,41 @@ const handleChange =(e)=>{
   });
 };
 
+const handleAddCustomer =()=>{
+if(
+  customerData.name === ""|| customerData.phone === ""|| customerData.email === ""|| customerData.address === ""
+){
+alert("please fill all fields");
+return
+}
+const newCustomer ={
+  name: customerData.name,
+  phone: customerData.phone,
+  email: customerData.email,
+  address: customerData.address,
+};
+setCustomers([...customers, newCustomer]);
+setShowModal(false);
+
+setCustomerData({
+  name: "",
+  phone: "",
+  email: "",
+  address: "",
+})
+};
+
+const handleCancel =()=>{
+  setShowModal(false);
+
+  setCustomerData({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+  })
+};
+
   const filteredCustomers = customers.filter((customer)=>
   customer.name.toLowerCase().includes(search.toLowerCase())||
   customer.phone.includes(search))
@@ -110,20 +145,24 @@ const handleChange =(e)=>{
           </div>
           <div className='mt-4'>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Phone Number</label>
-            <input type="text" placeholder='Enter phone number' className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'/>
+            <input type="text" name='phone' value={customerData.phone} onChange={handleChange} 
+            placeholder='Enter phone number' className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'/>
           </div>
           <div className='mt-4'>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Email</label>
-            <input type="email" placeholder='Enter email address' className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'/>
+            <input type="email" name='email' value={customerData.email} onChange={handleChange} placeholder='Enter email address' className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'/>
           </div>
           <div className='mt-4'>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Address</label>
-            <textarea rows="3" placeholder='Enter address' 
+            <textarea rows="3" name='address' value={customerData.address} onChange={handleChange} 
+            placeholder='Enter address' 
             className='w-full border border-gray-300 px-4 py-2 rounded-lg outline-none focus:border-slate-900 resize-none'></textarea>
           </div>
           <div className='flex justify-end gap-3 mt-6'>
-            <button className='px-4 py-2 border border-red-500 text-red-600  rounded-lg hover:bg-red-600 hover:text-white transition cursor-pointer'>Cancel</button>
-            <button className='px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-700 transition cursor-pointer'>Add Customer</button>
+            <button onClick={handleCancel} className='px-4 py-2 border border-red-500 text-red-600  rounded-lg hover:bg-red-600 hover:text-white transition cursor-pointer'>
+              Cancel
+              </button>
+            <button onClick={handleAddCustomer} className='px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-700 transition cursor-pointer'>Add Customer</button>
           </div>
           </div>
         </div>
