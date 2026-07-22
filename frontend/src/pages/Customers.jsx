@@ -5,7 +5,14 @@ import { FaPlus, FaSearch } from 'react-icons/fa';
 
 const Customers = () => {
   const [search, setSearch] = useState("");
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
+  const [customerData, setCustomerData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+  });
+
   const [customers, setCustomers] = useState([{
      name: "Rahul Sharma",
     phone: "9876512340",
@@ -19,6 +26,13 @@ const Customers = () => {
     address: "New Delhi",
   }
 ]);
+
+const handleChange =(e)=>{
+  setCustomerData({
+...customerData,
+[e.target.name]: e.target.value,
+  });
+};
 
   const filteredCustomers = customers.filter((customer)=>
   customer.name.toLowerCase().includes(search.toLowerCase())||
@@ -88,10 +102,28 @@ const Customers = () => {
         <div className='fixed inset-0 bg-black/40 flex items-center justify-center'>
           <div className='bg-white rounded-xl p-6 w-[500px] shadow-xl '>
             <h2 className='text-2xl font-bold text-slate-900'>Add Customer</h2>
-            <p className='text-gray-500 mt-2'>Enter Customer Details</p>
+            <p className='text-gray-500 mt-2'>Enter customer details</p>
           <div className='mt-6'>
-            <label htmlFor="" className='block text-sm font-medium mb-2 text-gray-700'>Customer Name</label>
-            <input type="text" placeholder='Enter customer name' className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900' />
+            <label className='block text-sm font-medium mb-2 text-gray-700'>Customer Name</label>
+            <input type="text" name='name' value={customerData.name} onChange={handleChange} placeholder='Enter customer name' 
+            className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900' />
+          </div>
+          <div className='mt-4'>
+            <label className='block text-sm font-medium mb-2 text-gray-700'>Phone Number</label>
+            <input type="text" placeholder='Enter phone number' className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'/>
+          </div>
+          <div className='mt-4'>
+            <label className='block text-sm font-medium mb-2 text-gray-700'>Email</label>
+            <input type="email" placeholder='Enter email address' className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'/>
+          </div>
+          <div className='mt-4'>
+            <label className='block text-sm font-medium mb-2 text-gray-700'>Address</label>
+            <textarea rows="3" placeholder='Enter address' 
+            className='w-full border border-gray-300 px-4 py-2 rounded-lg outline-none focus:border-slate-900 resize-none'></textarea>
+          </div>
+          <div className='flex justify-end gap-3 mt-6'>
+            <button className='px-4 py-2 border border-red-500 text-red-600  rounded-lg hover:bg-red-600 hover:text-white transition cursor-pointer'>Cancel</button>
+            <button className='px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-700 transition cursor-pointer'>Add Customer</button>
           </div>
           </div>
         </div>
