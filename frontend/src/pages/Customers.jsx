@@ -6,6 +6,8 @@ import { FaPlus, FaSearch } from 'react-icons/fa';
 const Customers = () => {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [customerData, setCustomerData] = useState({
     name: "",
     phone: "",
@@ -56,6 +58,13 @@ setCustomerData({
   email: "",
   address: "",
 })
+};
+
+const handleEdit = ()=>{
+  setCustomerData(customers[index]);
+  setEditIndex(index);
+  setIsEditing(true);
+  setShowModal(true);
 };
 
 const handleCancel =()=>{
@@ -115,7 +124,7 @@ const handleCancel =()=>{
                   <td className='p-3 text-gray-800'>{customer.address} </td>
                   <td className='p-3'>
                     <div className='flex gap-2'>
-                      <button className='bg-blue-500 text-white rounded-md px-3 py-1 hover:bg-blue-600 transition'>
+                      <button onClick={()=> handleEdit(index)} className='bg-blue-500 text-white rounded-md px-3 py-1 hover:bg-blue-600 transition'>
                         Edit
                       </button>
                       <button className='bg-red-500 text-white rounded-md px-3 py-1 hover:bg-red-600 transition'>Delete</button>
