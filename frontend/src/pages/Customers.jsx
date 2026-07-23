@@ -8,6 +8,8 @@ const Customers = () => {
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(null);
   const [customerData, setCustomerData] = useState({
     name: "",
     phone: "",
@@ -36,13 +38,32 @@ const handleChange =(e)=>{
   });
 };
 
+const resetForm = ()=>{
+  setCustomerData({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+  });
+
+  setIsEditing(false);
+  setEditIndex(null);
+}
+
 const handleAddCustomer =()=>{
 if(
   customerData.name === ""|| customerData.phone === ""|| customerData.email === ""|| customerData.address === ""
 ){
 alert("please fill all fields");
-return
+return;
 }
+if (isEditing) {
+  const updatedCustomers = [...customers];
+  updatedCustomers[editIndex] = customerData;
+  setCustomers(updatedCustomers);
+
+  resetForm();
+}else{
 const newCustomer ={
   name: customerData.name,
   phone: customerData.phone,
@@ -50,17 +71,12 @@ const newCustomer ={
   address: customerData.address,
 };
 setCustomers([...customers, newCustomer]);
+}
 setShowModal(false);
-
-setCustomerData({
-  name: "",
-  phone: "",
-  email: "",
-  address: "",
-})
+resetForm();
 };
 
-const handleEdit = ()=>{
+const handleEdit = (index)=>{
   setCustomerData(customers[index]);
   setEditIndex(index);
   setIsEditing(true);
@@ -68,14 +84,13 @@ const handleEdit = ()=>{
 };
 
 const handleCancel =()=>{
+  resetForm();
   setShowModal(false);
+};
 
-  setCustomerData({
-    name: "",
-    phone: "",
-    email: "",
-    address: "",
-  })
+const handleDelete = (index)=>{
+  const updatedCustomers = customers.filter((_,i)=> i !== index);
+  setCustomers(updatedCustomers);
 };
 
   const filteredCustomers = customers.filter((customer)=>
@@ -83,7 +98,7 @@ const handleCancel =()=>{
   customer.phone.includes(search))
   
   return (
-    <div className='flex min-h-screen'>
+    <div className='flex min-h-screen bg-gray-100'>
       <Sidebar/>
       <div className='flex-1'>
         <Navbar/>
@@ -97,7 +112,8 @@ const handleCancel =()=>{
                 className='border border-gray-300 py-2 pl-10 pr-4 w-80 rounded-lg outline-none' />
             </div>
             <div>
-              <button onClick={()=>setShowModal(true)} className='bg-slate-900 text-white rounded-lg px-5 py-2 cursor-pointer flex items-center gap-2 hover:bg-slate-700 transition'>
+              <button onClick={()=>{resetForm();
+                setShowModal(true)}} className='bg-slate-900 text-white rounded-lg px-5 py-2 cursor-pointer flex items-center gap-2 hover:bg-slate-700 transition'>
                 <FaPlus/>
                 <span>Add Customer</span>
               </button>
@@ -127,7 +143,12 @@ const handleCancel =()=>{
                       <button onClick={()=> handleEdit(index)} className='bg-blue-500 text-white rounded-md px-3 py-1 hover:bg-blue-600 transition'>
                         Edit
                       </button>
-                      <button className='bg-red-500 text-white rounded-md px-3 py-1 hover:bg-red-600 transition'>Delete</button>
+                      <button onClick={()=>{
+                        setDeleteIndex(index);
+                        setShowDeleteModal(true);
+                      }} className='bg-red-500 text-white rounded-md px-3 py-1 hover:bg-red-600 transition'>
+                        Delete
+                        </button>
                     </div>
                   </td>
                 </tr>
@@ -145,7 +166,7 @@ const handleCancel =()=>{
       {showModal && (
         <div className='fixed inset-0 bg-black/40 flex items-center justify-center'>
           <div className='bg-white rounded-xl p-6 w-[500px] shadow-xl '>
-            <h2 className='text-2xl font-bold text-slate-900'>Add Customer</h2>
+            <h2 className='text-2xl font-bold text-slate-900'>{isEditing?"Edit Customer":"Add Customer"}</h2>
             <p className='text-gray-500 mt-2'>Enter customer details</p>
           <div className='mt-6'>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Customer Name</label>
@@ -171,7 +192,9 @@ const handleCancel =()=>{
             <button onClick={handleCancel} className='px-4 py-2 border border-red-500 text-red-600  rounded-lg hover:bg-red-600 hover:text-white transition cursor-pointer'>
               Cancel
               </button>
-            <button onClick={handleAddCustomer} className='px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-700 transition cursor-pointer'>Add Customer</button>
+            <button onClick={handleAddCustomer} className='px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-700 transition cursor-pointer'>
+              {isEditing? "Update Customer":"Add Customer"}
+              </button>
           </div>
           </div>
         </div>
