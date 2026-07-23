@@ -61,8 +61,6 @@ if (isEditing) {
   const updatedCustomers = [...customers];
   updatedCustomers[editIndex] = customerData;
   setCustomers(updatedCustomers);
-
-  resetForm();
 }else{
 const newCustomer ={
   name: customerData.name,
@@ -77,7 +75,7 @@ resetForm();
 };
 
 const handleEdit = (index)=>{
-  setCustomerData(customers[index]);
+  setCustomerData({...customers[index]});
   setEditIndex(index);
   setIsEditing(true);
   setShowModal(true);
@@ -89,8 +87,21 @@ const handleCancel =()=>{
 };
 
 const handleDelete = (index)=>{
-  const updatedCustomers = customers.filter((_,i)=> i !== index);
+  setDeleteIndex(index);
+  setShowDeleteModal(true)
+};
+
+const confirmDeleteCustomer = ()=>{
+  const updatedCustomers = customers.filter((_, i)=> i!== deleteIndex);
+
   setCustomers(updatedCustomers);
+  setDeleteIndex(null);
+  setShowDeleteModal(false);
+};
+
+const cancelDelete = ()=>{
+  setDeleteIndex(null);
+  setShowDeleteModal(false);
 };
 
   const filteredCustomers = customers.filter((customer)=>
@@ -109,7 +120,7 @@ const handleDelete = (index)=>{
             <div className='relative'>
               <FaSearch className='absolute top-1/2 left-3 -translate-y-1/2 text-gray-400'/>
                 <input type="text" placeholder='Search Customer' value={search} onChange={(e)=> setSearch(e.target.value)}
-                className='border border-gray-300 py-2 pl-10 pr-4 w-80 rounded-lg outline-none' />
+                className='border border-gray-300 py-2 pl-10 pr-4 w-96 rounded-lg outline-none' />
             </div>
             <div>
               <button onClick={()=>{resetForm();
@@ -134,19 +145,16 @@ const handleDelete = (index)=>{
                 {filteredCustomers.length > 0 ?(
                 filteredCustomers.map((customer, index)=>(
                 <tr key={index} className='border-b hover:bg-gray-50 transition'>
-                  <td className='p-3 text-gray-800'>{customer.name}</td>
-                  <td className='p-3 text-gray-800'>{customer.phone}</td>
-                  <td className='p-3 text-gray-800'>{customer.email} </td>
+                  <td className='p-3 text-gray-800 font-semibold'>{customer.name}</td>
+                  <td className='p-3 font-mono text-gray-800'>{customer.phone}</td>
+                  <td className='p-3 text-gray-600'>{customer.email} </td>
                   <td className='p-3 text-gray-800'>{customer.address} </td>
                   <td className='p-3'>
                     <div className='flex gap-2'>
-                      <button onClick={()=> handleEdit(index)} className='bg-blue-500 text-white rounded-md px-3 py-1 hover:bg-blue-600 transition'>
+                      <button onClick={()=> handleEdit(index)} className='bg-blue-500 text-white rounded-md px-4 py-1 hover:bg-blue-600 transition'>
                         Edit
                       </button>
-                      <button onClick={()=>{
-                        setDeleteIndex(index);
-                        setShowDeleteModal(true);
-                      }} className='bg-red-500 text-white rounded-md px-3 py-1 hover:bg-red-600 transition'>
+                      <button onClick={()=>handleDelete(index)} className='bg-red-500 text-white rounded-md px-4 py-1 hover:bg-red-600 transition'>
                         Delete
                         </button>
                     </div>
@@ -196,6 +204,19 @@ const handleDelete = (index)=>{
               {isEditing? "Update Customer":"Add Customer"}
               </button>
           </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className='fixed inset-0 bg-black/40 flex justify-center items-center'>
+          <div className='w-[400px] bg-white rounded-xl p-8 shadow-xl'>
+            <h2 className='text-red-500 font-bold text-2xl'>Delete Customer</h2>
+            <p className='text-gray-800 mt-4 text-center' >Are you sure you want to delete this?</p>
+            <div className='flex justify-end gap-5 mt-8'>
+              <button onClick={cancelDelete} className='border border-gray-400 px-4 py-2 rounded-lg hover:bg-gray-100 cursor-pointer '>Cancel</button>
+              <button onClick={confirmDeleteCustomer} className='bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 cursor-pointer'>Delete</button>
+            </div>
           </div>
         </div>
       )}
