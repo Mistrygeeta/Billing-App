@@ -28,9 +28,11 @@ const Sidebar = () => {
                     Customers
                     </Link>
                 </li>
-                <li className='flex items-center gap-2 px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg'>
+                <li >
+                    <Link to="/bills" className='flex items-center gap-2 px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg'>
                     <FaFileInvoiceDollar />
                     Bills
+                    </Link>
                 </li>
                 <li className='flex items-center gap-2 px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg'>
                     <FaChartBar/>
