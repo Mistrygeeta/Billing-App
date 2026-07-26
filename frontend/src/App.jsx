@@ -6,11 +6,13 @@ import Signup from './pages/Signup';
 import Products from './pages/Products';
 import Customers from './pages/Customers';
 import Bills from './pages/Bills';
+import Navbar from './components/Navbar/Navbar';
 
 function App() {
   return (
    <BrowserRouter>
    <Routes>
+    <Route path='/navbar' element={<Navbar/>} />
     <Route path='/products' element={<Products/>}/>
     <Route path='/customers' element={<Customers/>}/>
     <Route path='/login' element={<Login />} />
