@@ -66,7 +66,7 @@ const Signup = () => {
        </div>
        </div>
        </div>
-       <div className="w-1/2 flex justify-center items-center ">
+       <div className="w-1/2 flex justify-center items-center p-3">
         <div className="bg-white rounded-2xl shadow-2xl p-10 w-[460px]">
             <h2 className="text-3xl font-bold text-gray-800">Create Account</h2>
             <p className="text-gray-500 mt-2">Create your BillPro account</p>
