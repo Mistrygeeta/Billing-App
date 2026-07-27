@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
-import {FaPlus } from 'react-icons/fa';
+import {FaPlus, FaTimes } from 'react-icons/fa';
 
 const Bills = () => {
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className='flex min-h-screen bg-gray-100'>
         <Sidebar/>
@@ -14,7 +15,7 @@ const Bills = () => {
                 <p className='text-gray-500 mt-1'>Create and manage customer invoices.</p>
             </div>
             <div className='px-8 flex justify-end mt-2'>
-              <button className='flex items-center gap-2 bg-slate-900 text-white px-5 py-2 rounded-lg hover:bg-slate-700 transition'>
+              <button onClick={()=> setShowModal(true)} className='flex items-center gap-2 bg-slate-900 text-white px-5 py-2 rounded-lg hover:bg-slate-700 transition'>
                 <FaPlus />
                 <span>Create Bill</span>
               </button>
@@ -24,7 +25,7 @@ const Bills = () => {
             <table className='w-full border-collapse'>
               <thead className='bg-gray-100'>
                 <tr className='border-b'>
-                  <th className='p-3 text-left font-semibold text-gray-700'>Bill No</th>
+                  <th className='p-3 text-left font-semibold text-gray-700'>Bill No.</th>
                   <th className='p-3 text-left font-semibold text-gray-700'>Customer</th>
                   <th className='p-3 text-left font-semibold text-gray-700'>Date</th>
                   <th className='p-3 text-left font-semibold text-gray-700'>Amount</th>
@@ -34,13 +35,28 @@ const Bills = () => {
               </thead>
               <tbody>
                 <tr>
-                  <td colSpan="6" className='text-center py-10 text-gray-500 font-medium'>NO Bills Found</td>
+                  <td colSpan="6" className='text-center py-10 text-gray-500 font-medium'>No Bills Found</td>
                 </tr>
               </tbody>
             </table>
              </div>
             </div>
         </div>
+        {showModal && (
+          <div className='fixed inset-0 bg-black/40 flex justify-center items-center'>
+            <div className='bg-white rounded-xl w-[900px] p-6 shadow-xl'>
+              <div className='flex justify-between items-center'>
+                <h2 className='text-2xl font-bold text-slate-900'>Create New Bill</h2>
+                <button onClick={()=> setShowModal(false)} className='text-2xl text-gray-500 hover:text-red-500'>
+                  <FaTimes/>
+                  </button>
+              </div>
+              <p className='text-gray-500 mt-2'>
+                Create a new invoice for your customer.
+              </p>
+            </div>
+          </div>
+        )}
     </div>
   )
 }
