@@ -10,7 +10,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <Sidebar />
-      <div className='flex-1 flex flex-col'>
+      <div className='ml-60 flex-1 flex flex-col'>
         <Navbar />
       <div className='p-6'>
        <div className='flex justify-between items-center'>

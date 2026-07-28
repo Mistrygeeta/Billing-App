@@ -9,7 +9,7 @@ const Bills = () => {
   return (
     <div className='flex min-h-screen bg-gray-100'>
         <Sidebar/>
-        <div className='flex flex-1 flex-col'>
+        <div className='ml-60 flex flex-1 flex-col'>
             <Navbar/>
             <div className='p-8'>
                 <h1 className='text-3xl font-bold text-slate-900'>Bills</h1>

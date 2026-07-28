@@ -7,11 +7,13 @@ import Products from './pages/Products';
 import Customers from './pages/Customers';
 import Bills from './pages/Bills';
 import Navbar from './components/Navbar/Navbar';
+import CreateBill from './pages/CreateBill';
 
 function App() {
   return (
    <BrowserRouter>
    <Routes>
+    <Route path='/create-bill' element={<CreateBill/>}/>
     <Route path='/navbar' element={<Navbar/>} />
     <Route path='/products' element={<Products/>}/>
     <Route path='/customers' element={<Customers/>}/>

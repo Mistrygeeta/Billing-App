@@ -3,7 +3,7 @@ import { MdDashboard } from "react-icons/md";
 import {Link} from "react-router-dom"
 const Sidebar = () => {
   return (
-    <div className='w-60 h-screen bg-slate-900 text-white flex flex-col'>
+    <div className='fixed left-0 w-60 h-screen bg-slate-900 text-white flex flex-col'>
         <div className='p-6 border-b border-slate-600'>
             <h1 className='text-2xl font-bold'>BillPro</h1>
             <p className='text-sm text-slate-300'>Bill Management System</p>

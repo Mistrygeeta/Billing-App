@@ -111,7 +111,7 @@ const cancelDelete = ()=>{
   return (
     <div className='flex min-h-screen bg-gray-100'>
       <Sidebar/>
-      <div className='flex-1'>
+      <div className='ml-60 flex-1'>
         <Navbar/>
         <div className='p-8'>
           <h2 className='text-3xl font-bold text-slate-900'>Customers</h2>
