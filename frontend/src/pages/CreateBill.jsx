@@ -1,17 +1,28 @@
 import React, { useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
+import { MdDelete} from 'react-icons/md';
+import {IoArrowBack} from 'react-icons/io5'
+import { useNavigate } from 'react-router-dom';
 
 const CreateBill = () => {
   const [showProductForm, setShowProductForm] = useState(false);
   const [products, setProducts] = useState([]);
-  const [addClicked, setAddClicked] = useState(false)
+  const [addClicked, setAddClicked] = useState(false);
+  const [customer, setCustomer] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    date: "",
+    paymentStatus: "Pending",
+  })
   const [productData, setProductData] = useState({
     product: "",
     qty: "",
     price: "",
     discount: "",
   });
+  const navigate = useNavigate();
   const subtotal = products.reduce((total, item)=>{
     return total+ Number(item.qty)*Number(item.price);
   },0);
@@ -23,6 +34,8 @@ const CreateBill = () => {
   const gst = (subtotal-discount)*0.18;
   const grandTotal = subtotal -discount + gst;
 
+  const invoiceNumber = `INV-${Date.now().toString().slice(-5)}`;
+
   const handleAddProduct =()=>{
     console.log(productData);
     setAddClicked(true);
@@ -31,7 +44,7 @@ const CreateBill = () => {
     ){
       return;
     }
-    const updatedProducts = [...products,{...productData}];
+    const updatedProducts = [...products,{...productData,discount: productData.discount||0,}];
     console.log(updatedProducts);
     setProducts(updatedProducts);
 
@@ -44,43 +57,86 @@ const CreateBill = () => {
   }
 
   const handleDeleteProduct =(index)=>{
-const updatedProducts = products.filter((_,i)=> i !== index);
-setProducts(updatedProducts);
+    const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+    if(!confirmDelete) return;
+    setProducts(products.filter((_,i)=> i !== index));
   };
+
+  const handleSaveBill = ()=>{
+    if(customer.name===""){
+      alert("Customer name required");
+      return
+    } if(products.length===0){
+      alert("Please add product");
+      return;
+    }
+    console.log(customer);
+    console.log(products);
+    alert("Bill Saved Successfully");
+
+    setCustomer({
+      name: "",
+      phone: "",
+      date: "",
+      email: "",
+      paymentStatus:"Pending",
+    })
+    setProducts([]);
+    setAddClicked(false);
+    setShowProductForm(false);
+
+    setProductData({
+      product: "",
+      qty: "",
+      price: "",
+      discount: 0,
+    })
+  }
   return (
     <div className='flex min-h-screen bg-gray-100'>
       <Sidebar/>
       <div className='ml-60 flex-1 flex flex-col'>
         <Navbar/>
-        <div className='p-8'>
+        <div className='p-6'>
+          <div className='flex items-center gap-3 mb-6'>
+            <button onClick={()=>navigate("/bills")} className='p-2 rounded-lg hover:bg-gray-200 transition'>
+              <IoArrowBack size={24}/>
+            </button>
+            <div>
           <h1 className='text-3xl font-bold text-slate-900'>Create New Bill</h1>
           <p className='text-gray-500 mt-1'>Create invoice for your customer.</p>
+         </div>
+         </div>
           <div className='mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 p-6'>
             <h2 className='text-xl font-semibold text-slate-900'>Customer & Invoice Information</h2>
             <p className='text-sm text-gray-500 mt-1'>Enter customer and invoice details</p>
              <div className='grid grid-cols-3 gap-6 mt-6'>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Customer Name</label>
-                <input type="text" placeholder='Enter customer name'
+                <input type="text" value={customer.name} onChange={(e)=>setCustomer({...customer, name:e.target.value})}
+                 placeholder='Enter customer name'
                 className='w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:border-slate-900' />
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Phone Number</label>
-                <input type="text" placeholder='Enter phone number'
+                <input type="text" value={customer.phone} onChange={(e)=> setCustomer({...customer, phone:e.target.value})} 
+                placeholder='Enter phone number'
                 className='w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:border-slate-900' />
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Invoice Date</label>
-                <input type="date" className='w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:border-slate-900'/>
+                <input type="date" value={customer.date} onChange={(e)=>setCustomer({...customer, date:e.target.value})}
+                className='w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:border-slate-900'/>
               </div>
               <div>
                 <label className='block text-sm font-medium mb-2 text-gray-700'>Email</label>
-                <input type="email" placeholder='Enter email'
+                <input type="email" value={customer.email} onChange={(e)=> setCustomer({...customer, email: e.target.value})} placeholder='Enter email'
                 className='w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:border-slate-900'/>
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Payment Status</label>
-                <select className='w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:border-slate-900'>
+                <select value={customer.paymentStatus} onChange={(e)=> setCustomer({...customer, paymentStatus: e.target.value})}
+                className='w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:border-slate-900'>
                   <option>Pending</option>
                   <option>Paid</option>
                   <option>Overdue</option>
@@ -88,7 +144,7 @@ setProducts(updatedProducts);
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Invoice No.</label>
-                <input type="text" value="INV-001" readOnly 
+                <input type="text" value={invoiceNumber} readOnly 
                 className='w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-2.5 '/>
               </div>
              </div>
@@ -157,11 +213,13 @@ setProducts(updatedProducts);
                       <td className='p-3 text-center'>
                         {item.qty}</td>
                       <td className='p-3'>Rs.{item.price}</td>
-                      <td className='p-3'>Rs.{item.discount}</td>
-                      <td className='p-3'>Rs.{(Number(item.qty)* Number(item.price)-Number(item.discount)).toFixed(2)}</td>
+                      <td className='p-3'>Rs.{item.discount || 0}</td>
+                      <td className='p-3'>Rs.{(Number(item.qty)* Number(item.price)-Number(item.discount||0)).toFixed(2)}</td>
                       <td className='p-3'>
                         <button onClick={()=>handleDeleteProduct(index)}
-                        className='text-red-600 hover:underline font-medium'>Delete</button>
+                        className='text-red-600 hover:text-red-800'>
+                          <MdDelete size={22}/>
+                        </button>
                       </td>
                     </tr>
                     ))}
@@ -198,7 +256,8 @@ setProducts(updatedProducts);
                 </div>
                 <div className='flex justify-end gap-3 mt-8 pt-4'>
                   <button className='px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition'>Cancel</button>
-                  <button className='px-8 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-700 transition'>Save Bill</button>
+                  <button onClick={handleSaveBill}
+                  className='px-8 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-700 transition'>Save Bill</button>
                 </div>
               </div>
               </div>
