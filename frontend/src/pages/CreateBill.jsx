@@ -1,8 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
 
 const CreateBill = () => {
+  const [showProductForm, setShowProductForm] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [showTable, setShowTable] = useState(false);
+  const [addClicked, setAddClicked] = useState(false)
+  const [productData, setProductData] = useState({
+    product: "",
+    qty: "",
+    price: "",
+    discount: "",
+  })
+
+  const handleAddProduct =()=>{
+    console.log(productData);
+    setAddClicked(true);
+    if(
+      productData.product === ""|| productData.qty === "" || productData.price ===""
+    ){
+      setShowTable(false);
+      return;
+    }
+    setProducts([...products,{...productData}]);
+    setShowTable(true);
+
+    setProductData({
+      product: "",
+      qty: "",
+      price: "",
+      discount: "",
+    })
+  }
   return (
     <div className='flex min-h-screen bg-gray-100'>
       <Sidebar/>
@@ -55,9 +85,45 @@ const CreateBill = () => {
                   <h2 className='text-xl font-semibold text-slate-900'>Products</h2>
                   <p className='text-sm text-gray-500 mt-1'>Add Products to this invoice.</p>
                 </div>
-                <button className='bg-slate-900 text-white px-5 py-2 rounded-lg hover:bg-slate-700 transition'>+ Add Product</button>
+                {!showProductForm ?(
+                <button onClick={()=>setShowProductForm(true)} className='bg-slate-900 text-white px-5 py-2 rounded-lg hover:bg-slate-700 transition'>
+                  + Add Product
+                  </button>
+                  ):(
+                    <button onClick={()=>setShowProductForm(false)} className='border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100'>
+                      Close
+                      </button>
+                  )}
               </div>
+              {showProductForm ? (
               <div className='mt-6 overflow-x-auto'>
+                <div className='grid grid-cols-12 gap-3 mb-5 bg-slate-50 p-4 rounded-xl'>
+                  <select value={productData.product} 
+                  onChange={(e)=>{
+                    setProductData({
+                      ...productData, product: e.target.value,
+                    })
+                  }}
+                  className='col-span-4 border border-gray-300 rounded-lg px-3 py-2'>
+                    <option>Select Product</option>
+                    <option value="rice">Rice</option>
+                    <option value="sugar">Sugar</option>
+                    <option value="oil">Oil</option>
+                  </select>
+                  <input type="text" value={productData.qty} 
+                  onChange={(e)=>setProductData({...productData, qty:e.target.value,})} placeholder='Qty'
+                  className='col-span-2 border border-gray-300 rounded-lg px-3 py-2'/>
+                  <input type="number" value={productData.price}
+                  onChange={(e)=> setProductData({...productData, price: e.target.value,})} placeholder='Price'
+                  className='col-span-2 border border-gray-300 rounded-lg px-3 py-2' />
+                  <input type="number" value={productData.discount}
+                  onChange={(e)=>setProductData({...productData, discount: e.target.value,})} placeholder='Discount'
+                  className='col-span-2 border border-gray-300 rounded-lg px-3 py-2'/>
+                  <button onClick={handleAddProduct} className='col-span-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition '>
+                    Add
+                    </button>
+                </div>
+                {showTable && (
                 <table className='w-full border-collapse'>
                   <thead>
                     <tr className='bg-gray-100 border-b'>
@@ -70,38 +136,52 @@ const CreateBill = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr >
-                      <td colSpan="6" className='text-center py-8 text-gray-400'>No Product yet</td>
+                    {products.map((item, index)=>(
+                    <tr key={index} className='border-b'>
+                      <td className='p-3' >{item.product}</td>
+                      <td className='p-3'>{item.qty}</td>
+                      <td className='p-3'>{item.price}</td>
+                      <td className='p-3'>{item.discount}</td>
+                      <td className='p-3'>{Number(item.qty)* Number(item.price)-Number(item.discount)}</td>
+                      <td className='p-3'>Delete</td>
                     </tr>
+                    ))}
                   </tbody>
                 </table>
+                )}
+                {addClicked && !showTable &&(
+                  <div className='text-center py-8 text-gray-400'>No Product added to this bill</div>
+                )}
               </div>
+              ):null}
               </div>
-              <div className='mt-6 bg-white rounded-2xl shadow-sm border border-gray-200 p-6'>
-                <h2 className='text-xl font-semibold text-slate-900 mb-6'>Bill Summary</h2>
-                <div className='max-w-sm ml-auto space-y-4 '>
-                  <div className='flex justify-between'>
-                    <span className='text-gray-600'>Subtotal</span>
-                    <span className='font-medium'>Rs.0.00</span>
+              <div className='mt-6 flex justify-end'>
+                <div className='w-full max-w-md bg-slate-50 border border-gray-200 rounded-2xl p-6 '>
+                <h2 className='text-xl font-semibold text-slate-900 mb-5'>Bill Summary</h2>
+                <div className='space-y-4 '>
+                  <div className='flex justify-between text-gray-600'>
+                    <span>Subtotal</span>
+                    <span>Rs.0.00</span>
                   </div>
-                  <div className='flex justify-between'>
-                    <span className='text-gray-600'>Discount</span>
-                    <span className='font-medium'>Rs.0.00</span>
+                  <div className='flex justify-between text-gray-600'>
+                    <span>Discount</span>
+                    <span>Rs.0.00</span>
                   </div>
-                  <div className='flex justify-between'>
-                    <span className='text-gray-600'>GST (18%)</span>
-                    <span className='font-medium'>Rs.0.00</span>
+                  <div className='flex justify-between text-gray-600'>
+                    <span>GST (18%)</span>
+                    <span>Rs.0.00</span>
                   </div>
-                  <hr />
+                  <div className='border-t border-gray-300 pt-4'></div>
                   <div className='flex justify-between text-xl font-bold text-slate-900'>
-                    <span>Grand Total</span>
+                    <span>Total</span>
                     <span>Rs.0.00</span>
                   </div>
                 </div>
-                <div className='flex justify-end gap-4 mt-6 mb-8'>
+                <div className='flex justify-end gap-3 mt-8 pt-4'>
                   <button className='px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition'>Cancel</button>
                   <button className='px-8 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-700 transition'>Save Bill</button>
                 </div>
+              </div>
               </div>
              </div>
           </div>
