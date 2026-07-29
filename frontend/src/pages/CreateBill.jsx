@@ -5,14 +5,23 @@ import Navbar from '../components/Navbar/Navbar';
 const CreateBill = () => {
   const [showProductForm, setShowProductForm] = useState(false);
   const [products, setProducts] = useState([]);
-  const [showTable, setShowTable] = useState(false);
   const [addClicked, setAddClicked] = useState(false)
   const [productData, setProductData] = useState({
     product: "",
     qty: "",
     price: "",
     discount: "",
-  })
+  });
+  const subtotal = products.reduce((total, item)=>{
+    return total+ Number(item.qty)*Number(item.price);
+  },0);
+
+  const discount = products.reduce((total, item)=>{
+    return total+ Number(item.discount);
+  },0);
+
+  const gst = (subtotal-discount)*0.18;
+  const grandTotal = subtotal -discount + gst;
 
   const handleAddProduct =()=>{
     console.log(productData);
@@ -20,11 +29,11 @@ const CreateBill = () => {
     if(
       productData.product === ""|| productData.qty === "" || productData.price ===""
     ){
-      setShowTable(false);
       return;
     }
-    setProducts([...products,{...productData}]);
-    setShowTable(true);
+    const updatedProducts = [...products,{...productData}];
+    console.log(updatedProducts);
+    setProducts(updatedProducts);
 
     setProductData({
       product: "",
@@ -33,6 +42,11 @@ const CreateBill = () => {
       discount: "",
     })
   }
+
+  const handleDeleteProduct =(index)=>{
+const updatedProducts = products.filter((_,i)=> i !== index);
+setProducts(updatedProducts);
+  };
   return (
     <div className='flex min-h-screen bg-gray-100'>
       <Sidebar/>
@@ -105,30 +119,30 @@ const CreateBill = () => {
                     })
                   }}
                   className='col-span-4 border border-gray-300 rounded-lg px-3 py-2'>
-                    <option>Select Product</option>
-                    <option value="rice">Rice</option>
-                    <option value="sugar">Sugar</option>
-                    <option value="oil">Oil</option>
+                    <option value="">Select Product</option>
+                    <option value="Rice">Rice</option>
+                    <option value="Sugar">Sugar</option>
+                    <option value="Oil">Oil</option>
                   </select>
-                  <input type="text" value={productData.qty} 
+                  <input type="number" value={productData.qty}  min="1"
                   onChange={(e)=>setProductData({...productData, qty:e.target.value,})} placeholder='Qty'
                   className='col-span-2 border border-gray-300 rounded-lg px-3 py-2'/>
-                  <input type="number" value={productData.price}
+                  <input type="number" value={productData.price} min="1"
                   onChange={(e)=> setProductData({...productData, price: e.target.value,})} placeholder='Price'
                   className='col-span-2 border border-gray-300 rounded-lg px-3 py-2' />
-                  <input type="number" value={productData.discount}
+                  <input type="number" value={productData.discount} min="0"
                   onChange={(e)=>setProductData({...productData, discount: e.target.value,})} placeholder='Discount'
                   className='col-span-2 border border-gray-300 rounded-lg px-3 py-2'/>
                   <button onClick={handleAddProduct} className='col-span-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition '>
                     Add
                     </button>
                 </div>
-                {showTable && (
+                {products.length>0 && (
                 <table className='w-full border-collapse'>
                   <thead>
                     <tr className='bg-gray-100 border-b'>
                       <th className='p-3 text-left text-sm font-semibold'>Product</th>
-                      <th className='p-3 text-left text-sm font-semibold'>Qty</th>
+                      <th className='p-3 text-sm font-semibold text-center'>Qty</th>
                       <th className='p-3 text-left text-sm font-semibold'>Price</th>
                       <th className='p-3 text-left text-sm font-semibold'>Discount</th>
                       <th className='p-3 text-left text-sm font-semibold'>Total</th>
@@ -138,18 +152,23 @@ const CreateBill = () => {
                   <tbody>
                     {products.map((item, index)=>(
                     <tr key={index} className='border-b'>
-                      <td className='p-3' >{item.product}</td>
-                      <td className='p-3'>{item.qty}</td>
-                      <td className='p-3'>{item.price}</td>
-                      <td className='p-3'>{item.discount}</td>
-                      <td className='p-3'>{Number(item.qty)* Number(item.price)-Number(item.discount)}</td>
-                      <td className='p-3'>Delete</td>
+                      <td className='p-3' >
+                        {item.product.charAt(0).toUpperCase() + item.product.slice(1)}</td>
+                      <td className='p-3 text-center'>
+                        {item.qty}</td>
+                      <td className='p-3'>Rs.{item.price}</td>
+                      <td className='p-3'>Rs.{item.discount}</td>
+                      <td className='p-3'>Rs.{(Number(item.qty)* Number(item.price)-Number(item.discount)).toFixed(2)}</td>
+                      <td className='p-3'>
+                        <button onClick={()=>handleDeleteProduct(index)}
+                        className='text-red-600 hover:underline font-medium'>Delete</button>
+                      </td>
                     </tr>
                     ))}
                   </tbody>
                 </table>
                 )}
-                {addClicked && !showTable &&(
+                {addClicked && products.length===0 &&(
                   <div className='text-center py-8 text-gray-400'>No Product added to this bill</div>
                 )}
               </div>
@@ -161,20 +180,20 @@ const CreateBill = () => {
                 <div className='space-y-4 '>
                   <div className='flex justify-between text-gray-600'>
                     <span>Subtotal</span>
-                    <span>Rs.0.00</span>
+                    <span>Rs. {subtotal.toFixed(2)}</span>
                   </div>
                   <div className='flex justify-between text-gray-600'>
                     <span>Discount</span>
-                    <span>Rs.0.00</span>
+                    <span>Rs.{discount.toFixed(2)}</span>
                   </div>
                   <div className='flex justify-between text-gray-600'>
                     <span>GST (18%)</span>
-                    <span>Rs.0.00</span>
+                    <span>Rs.{gst.toFixed(2)}</span>
                   </div>
                   <div className='border-t border-gray-300 pt-4'></div>
                   <div className='flex justify-between text-xl font-bold text-slate-900'>
                     <span>Total</span>
-                    <span>Rs.0.00</span>
+                    <span>Rs.{grandTotal.toFixed(2)}</span>
                   </div>
                 </div>
                 <div className='flex justify-end gap-3 mt-8 pt-4'>
