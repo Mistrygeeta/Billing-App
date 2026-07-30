@@ -8,11 +8,13 @@ import Customers from './pages/Customers';
 import Bills from './pages/Bills';
 import Navbar from './components/Navbar/Navbar';
 import CreateBill from './pages/CreateBill';
+import ViewBill from './pages/ViewBill';
 
 function App() {
   return (
    <BrowserRouter>
    <Routes>
+    <Route path='/view-bill/:id' element={<ViewBill/>}/>
     <Route path='/create-bill' element={<CreateBill/>}/>
     <Route path='/navbar' element={<Navbar/>} />
     <Route path='/products' element={<Products/>}/>

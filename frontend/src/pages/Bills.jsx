@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
-import {FaClock, FaFileInvoiceDollar, FaPlus, FaRupeeSign} from 'react-icons/fa';
+import {FaClock, FaEye, FaFileInvoiceDollar, FaPlus, FaRupeeSign} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { MdDelete } from 'react-icons/md';
 import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
@@ -114,17 +114,24 @@ const Bills = () => {
                       }`}>{bill.customer.paymentStatus}</span>
                   </td>
                   <td className='p-3'>
+                    <div className='flex items-center gap-2'>
+                      <button onClick={()=> navigate(`/view-bill/${index}`)}
+                      className='p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100' title='View Bill'>
+                        <FaEye size={20}/>
+                      </button>
                     <button onClick={()=>{
                       setSelectedBillIndex(index);
                       setShowDeleteModal(true);
-                    }} className='text-red-500 hover:text-red-700'>
+                    }} className='p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition' title='Delete Bill'>
                       <MdDelete size={22}/>
                     </button>
+                    </div>
                   </td>
                 </tr>))
                 ):(
                   <tr>
-                    <td colSpan="6" className='text-center py-10 text-gray-500 font-medium'>No Bills Found</td>
+                    <td colSpan="6" className='text-center py-10 text-gray-500 font-medium'>
+                    No Bills Found</td>
                   </tr>
                 )}
               </tbody>
