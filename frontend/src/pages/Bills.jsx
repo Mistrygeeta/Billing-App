@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar/Navbar';
 import {FaClock, FaFileInvoiceDollar, FaPlus, FaRupeeSign} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { MdDelete } from 'react-icons/md';
+import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
 
 const Bills = () => {
   const navigate = useNavigate();
@@ -12,9 +13,25 @@ const Bills = () => {
   const [selectedBillIndex, setSelectedBillIndex] = useState(null);
   useEffect(()=>{
     const savedBills = JSON.parse(localStorage.getItem("bills")) || [];
-
     setBills(savedBills);
   },[]);
+
+  const handleDeleteBill = ()=>{
+    if(selectedBillIndex === null) return;
+
+    const updatedBills = bills.filter((_,i)=> i !== selectedBillIndex);
+    setBills(updatedBills);
+
+    localStorage.setItem("bills", JSON.stringify(updatedBills));
+
+    setShowDeleteModal(false);
+    setSelectedBillIndex(null)
+  };
+
+  const closeDeleteModal =()=>{
+     setShowDeleteModal(false);
+     setSelectedBillIndex(null);
+  };
   return (
     <div className='flex min-h-screen bg-gray-100'>
         <Sidebar/>
@@ -68,7 +85,6 @@ const Bills = () => {
                 </div>
               </div>
             </div>
-            
             <div className='px-8 mt-6'>
             <div className='bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden'>
             <table className='w-full border-collapse'>
@@ -98,7 +114,10 @@ const Bills = () => {
                       }`}>{bill.customer.paymentStatus}</span>
                   </td>
                   <td className='p-3'>
-                    <button className='text-red-500 hover:text-red-700'>
+                    <button onClick={()=>{
+                      setSelectedBillIndex(index);
+                      setShowDeleteModal(true);
+                    }} className='text-red-500 hover:text-red-700'>
                       <MdDelete size={22}/>
                     </button>
                   </td>
@@ -113,6 +132,11 @@ const Bills = () => {
              </div>
             </div>
         </div>
+        <ConfirmModal
+        isOpen={showDeleteModal}
+        title="Delete Bill"
+        onCancel={closeDeleteModal}
+        onConfirm={handleDeleteBill}/>
     </div>
   )
 }
