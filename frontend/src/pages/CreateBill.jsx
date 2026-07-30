@@ -65,13 +65,25 @@ const CreateBill = () => {
   const handleSaveBill = ()=>{
     if(customer.name===""){
       alert("Customer name required");
-      return
+      return;
     } if(products.length===0){
       alert("Please add product");
       return;
     }
     console.log(customer);
     console.log(products);
+    const newBill = {
+      invoiceNumber,
+      customer,
+      products,
+      subtotal,
+      discount,
+      gst,
+      grandTotal,
+    };
+    const existingBills = JSON.parse(localStorage.getItem("bills")) || [];
+    existingBills.push(newBill);
+    localStorage.setItem("bills", JSON.stringify(existingBills));
     alert("Bill Saved Successfully");
 
     setCustomer({
@@ -90,7 +102,8 @@ const CreateBill = () => {
       qty: "",
       price: "",
       discount: 0,
-    })
+    });
+    navigate("/bills");
   }
   return (
     <div className='flex min-h-screen bg-gray-100'>
