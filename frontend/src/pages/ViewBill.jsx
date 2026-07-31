@@ -9,7 +9,8 @@ const ViewBill = () => {
     useEffect(()=>{
       const savedBills = JSON.parse(localStorage.getItem("bills")) || [];
       
-      setBill(savedBills[parseInt(id)]);
+      const selectedBill=savedBills[parseInt(id)];
+      setBill(selectedBill);
     },[id]);
 
     if(!bill){
@@ -24,7 +25,7 @@ const ViewBill = () => {
         <Sidebar/>
         <div className='ml-60 flex-1'>
             <Navbar/>
-            <div className='p-8'>
+            <div className='p-6'>
                 <h1 className='text-3xl font-bold text-slate-900'>Bill Details</h1>
                 <p className='text-gray-500 mt-1'>View customer invoice details.</p>
                 <div className='bg-white rounded-xl shadow-sm border border-gray-200 mt-6 p-8'>
@@ -42,30 +43,70 @@ const ViewBill = () => {
                                 }`}>{bill.customer.paymentStatus}</span>
                         </div>
                         <div className='grid grid-cols-2 gap-6 mt-6'>
-                            <div className='bg-slate-50 rounded-xl p-5 border border-gray-200'>
-                                <h3 className='text-lg font-semibold text-slate-900 mb-4'>Customer Details</h3>
+                            <div className='bg-slate-50 rounded-xl p-4 border border-gray-200'>
+                                <h3 className='text-lg font-semibold text-slate-900 mb-3'>Customer Details</h3>
                                 <div className='space-y-2 text-gray-700'>
-                                <p><span className='font-medium'>Name:</span>{bill.customer.name}</p>
-                                <p><span className='font-medium'>Phone:</span>{bill.customer.phone}</p>
-                                <p><span className='font-medium'>Email:</span>{bill.customer.email}</p>
+                                <p><span className='font-medium mr-2'>Name: </span>{bill.customer.name}</p>
+                                <p><span className='font-medium mr-2'>Phone: </span>{bill.customer.phone}</p>
+                                <p><span className='font-medium mr-2'>Email: </span>{bill.customer.email}</p>
                                 </div>
                             </div>
                             <div className='bg-slate-50 rounded-xl p-5 border border-gray-200'>
                                 <h3 className='text-lg font-semibold text-slate-900 mb-4'>Invoice Summary</h3>
-                                <div className='space-y-2 text-gray-700'>
-                                <p><span className='font-medium'>Total Items: </span>{bill.products.length}</p>
-                                <p><span className='font-medium'>Subtotal: </span>RS.{bill.grandTotal.toFixed(2)}</p>
-                                <p><span className='font-medium'>GST: </span>RS.{bill.gst.toFixed(2)}</p>
-                                <p><span className='font-medium'>Discount: </span>Rs.{bill.discount.toFixed(2)}</p>
-                                 <hr className='my-2' />
-                                 <p className='text-lg font-bold text-slate-900'>Grand Total: Rs.{bill.grandTotal.toFixed(2)}</p>
+                                <div className='space-y-3 text-gray-700'>
+                                <div className='flex justify-between'>
+                                    <span>Total Items</span>
+                                    <span>{bill.products.length}</span>
+                                    </div>
+                                    <div className='flex justify-between'>
+                                        <span>Subtotal</span>
+                                        <span>Rs.{bill.subtotal.toFixed(2)}</span>
+                                    </div>
+                                    <div className='flex justify-between'>
+                                        <span>GST</span>
+                                        <span>Rs.{bill.gst.toFixed(2)}</span>
+                                    </div>
+                                    <div className='flex justify-between'>
+                                        <span>Discount</span>
+                                        <span>Rs.{bill.discount.toFixed(2)}</span>
+                                    </div>
+                                    <hr />
+                                    <div className='flex justify-between text-lg font-bold text-slate-900'>
+                                        <span>Grand Total</span>
+                                        <span>Rs.{bill.grandTotal.toFixed(2)}</span>
+                                    </div>
                                 </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='mt-8'>
+                            <h3 className='text-lg font-semibold text-slate-900 mb-4'>Products</h3>
+                            <div className='overflow-hidden rounded-xl border border-gray-200'>
+                                <table className='w-full border-collapse'>
+                                    <thead className='bg-slate-900 text-white'>
+                                        <tr>
+                                            <th className='px-4 py-4 text-left'>Product</th>
+                                            <th className='px-4 py-4 text-center'>Qty</th>
+                                            <th className='px-4 py-4 text-right'>Price</th>
+                                            <th className='px-4 py-4 text-right'>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {bill.products.map((product, index)=>(
+                                        <tr key={index} className='border-t border-gray-200 hover:bg-gray-50'>
+                                            <td className='px-4 py-4'>{product.product}</td>
+                                            <td className='px-4 py-4 text-center'>{product.qty}</td>
+                                            <td className='px-4 py-4 text-right'>Rs.{Number(product.price).toFixed(2)}</td>
+                                            <td className='px-4 py-4 text-right font-medium'>Rs. {(Number(product.qty)*Number(product.price)).toFixed(2)}</td>
+                                        </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
   )
 }
 
