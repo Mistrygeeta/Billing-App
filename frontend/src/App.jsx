@@ -9,6 +9,7 @@ import Bills from './pages/Bills';
 import Navbar from './components/Navbar/Navbar';
 import CreateBill from './pages/CreateBill';
 import ViewBill from './pages/ViewBill';
+import InvoicePrint from './pages/InvoicePrint';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
    <Routes>
     <Route path='/view-bill/:id' element={<ViewBill/>}/>
     <Route path='/create-bill' element={<CreateBill/>}/>
+    <Route path='/print-bill/:id' element={<InvoicePrint/>}/>
     <Route path='/navbar' element={<Navbar/>} />
     <Route path='/products' element={<Products/>}/>
     <Route path='/customers' element={<Customers/>}/>
