@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ViewBill = () => {
+    const navigate = useNavigate();
     const {id} = useParams();
     const [bill, setBill] = useState(null);
+    const billRef = useRef();
     useEffect(()=>{
       const savedBills = JSON.parse(localStorage.getItem("bills")) || [];
       
       const selectedBill=savedBills[parseInt(id)];
       setBill(selectedBill);
     },[id]);
+
+    const handlePrint = ()=>{
+        window.print();
+    };
 
     if(!bill){
         return(
@@ -22,13 +28,28 @@ const ViewBill = () => {
     };
   return (
     <div className='flex min-h-screen bg-gray-100'>
+        <div className='no-print'>
         <Sidebar/>
+        </div>
         <div className='ml-60 flex-1'>
+            <div className='no-print'>
             <Navbar/>
+            </div>
             <div className='p-6'>
-                <h1 className='text-3xl font-bold text-slate-900'>Bill Details</h1>
-                <p className='text-gray-500 mt-1'>View customer invoice details.</p>
-                <div className='bg-white rounded-xl shadow-sm border border-gray-200 mt-6 p-8'>
+                <div className='flex justify-between items-center mb-6 no-print'>
+                    <div>
+                     <h1 className='text-3xl font-bold text-slate-900'>Bill Details</h1>
+                     <p className='text-gray-500 mt-1'>View customer invoice details.</p>
+                    </div>
+                    <div className='flex gap-3'>
+                        <button onClick={()=> navigate("/bills")}
+                        className='px-5 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition'    >Back</button>
+                        <button onClick={handlePrint} className='px-5 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-700 transition'>Print</button>
+                    </div>
+                </div>
+                
+                <div ref={billRef}
+                       className='print-area bg-white rounded-xl shadow-sm border border-gray-200 mt-6 p-8'>
                         <div className='flex justify-between items-start border-b border-gray-200 pb-6'>
                             <div>
                                 <h2 className='text-2xl font-bold text-slate-900'>Invoice # {bill.invoiceNumber}</h2>
@@ -105,8 +126,38 @@ const ViewBill = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                     <style>{`
+                @media print{
+                .no-print{
+                display: none !important;
+                }
+                body{
+                 background: white;
+                 margin: 0;
+                 padding:0;
+                }
+                 .print-area{
+                 width: 100%;
+                 margin: 0;
+                 padding: 20px;
+                 box-shadow: none !important;
+                 background: white;
+                 }
+                 .ml-6o{
+                 margin-left: 0 !important
+                 }
+                 table{
+                 width: 100%;
+                 border-collapse: collapse
+                 }
+                 th,td{
+                 border: 1px solid #ccc;
+                 padding: 8px;
+                 }
+             }`
+            }</style>
+        </div>
+    </div>  
   )
 }
 
