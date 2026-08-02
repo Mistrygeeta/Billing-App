@@ -46,7 +46,7 @@ const InvoicePrint = () => {
          </div>
     }
   return (
-    <div className='max-w-4xl mx-auto bg-white p-10 shadow-lg rounded-lg'>
+    <div className='max-w-4xl mx-auto bg-white p-10'>
         <div className='flex justify-between items-center border-b-2 border-gray-300 pb-6'>
             <div className='flex items-center gap-4'>
                 <img src="/logo.png" alt="BillPro Logo" className='w-16 h-16' />
@@ -121,7 +121,7 @@ const InvoicePrint = () => {
                 <p className='text-lg font-semibold'>Thank You For Your Business!</p>
                 <p className='text-sm mt-2'>We appreciate your trust in BillPro Store.</p>
             </div>
-            <div className='flex justify-end mt-16'>
+            <div className='flex justify-end mt-10'>
                 <div className='text-center'>
                     <div className='border-t border-gray-500 w-48'></div>
                         <p className='mt-2 font-medium'>Authorized Signature</p> 
