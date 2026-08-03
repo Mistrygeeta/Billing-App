@@ -10,6 +10,7 @@ import Navbar from './components/Navbar/Navbar';
 import CreateBill from './pages/CreateBill';
 import ViewBill from './pages/ViewBill';
 import InvoicePrint from './pages/InvoicePrint';
+import Reports from './pages/Reports';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
     <Route path='/signup' element={<Signup />} />
     <Route path='/dashboard' element ={<Dashboard />} />
     <Route path='/bills' element = {<Bills/>}/> 
+    <Route path='/reports' element={<Reports/>}/>
    </Routes>
    </BrowserRouter>
   )

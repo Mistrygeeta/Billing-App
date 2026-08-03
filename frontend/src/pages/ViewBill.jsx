@@ -15,6 +15,7 @@ const ViewBill = () => {
       setBill(selectedBill);
     },[id]);
 
+
     if(!bill){
         return(
             <div className='flex justify-center items-center h-screen'>
