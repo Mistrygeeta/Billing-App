@@ -7,7 +7,7 @@ import {Bar, BarChart, CartesianGrid, Legend, PieChart, ResponsiveContainer, Too
 
 const Reports = () => {
     const [bills, setBills] = useState([]);
-
+    const [filter, setFilter] = useState("This Year");
     const COLORS = ["#0f172a", "#3b82f6", "#f59e0b"];
     const months = ["Jan","Feb","Mar", "Apr","May", "Jun", 
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -48,7 +48,6 @@ const Reports = () => {
     const productSales = {};
 
     bills.forEach((bill)=>{
-        console.log(bill.products)
      bill.products.forEach((product)=>{
         if(productSales[product.product]){
             productSales[product.product] += Number(product.qty);
@@ -61,15 +60,58 @@ const Reports = () => {
         name, sold,
     })).sort((a,b)=> b.sold-a.sold).slice(0, 5);
 
-    const salesData = months.map((month, index)=>{
-        const monthlySales = bills.filter((bill)=>{
-            const billDate = new Date(bill.customer.date);
-            return billDate.getMonth() === index;
-        }).reduce((sum, bill)=> sum + bill.grandTotal, 0);
-        return{
-            month, sales: monthlySales,
-        };
-    });
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentyear = currentDate.getFullYear();
+
+    let salesData = [];
+
+    if(filter === "This Year"){
+        salesData = months.map((month, index)=>{
+            const monthlySales = bills.filter((bill)=>{
+                const billDate = new Date(bill.customer.date);
+                return billDate.getFullYear()=== currentyear && billDate.getMonth()===index;
+            }).reduce((sum, bill)=> sum + bill.grandTotal, 0);
+            return{
+                month, 
+                sales: monthlySales,
+            };
+        })
+    }else if(filter === "This Month"){
+        const daysInMonth = new Date(currentyear, currentMonth + 1, 0).getDate();
+        salesData = Array.from({length: daysInMonth}, (_,i)=>{
+            const day = i + 1;
+            const dailySales = bills.filter((bill)=>{
+                const billDate = new Date(bill.customer.date);
+                return(
+                    billDate.getDate() === day && billDate.getMonth()=== currentMonth && billDate.getFullYear() === currentyear
+                );
+            }).reduce((sum, bill)=> sum + bill.grandTotal, 0);
+            return{
+                day,
+                sales: dailySales,
+            }
+        });
+    }else if(filter === "Last Month"){
+        const lastMonth = currentMonth === 0? 11 : currentMonth - 1;
+        const year = currentMonth === 0 ? currentyear -1 : currentyear;
+        const daysInMonth = new Date(year, lastMonth +1, 0).getDate();
+
+        salesData = Array.from({length: daysInMonth}, (_,i)=>{
+            const day = i+1;
+            const dailySales = bills.filter((bill)=>{
+                const billDate = new Date(bill.customer.date);
+
+                return(
+                    billDate.getFullYear()=== year && billDate.getMonth()=== lastMonth && billDate.getDate() === day
+                );
+            }).reduce((sum, bill)=> sum + bill.grandTotal, 0);
+            return{
+                day,
+                sales: dailySales,
+            };
+        });
+    }
   return (
     <div className='flex min-h-screen bg-gray-100'>
         <Sidebar/>
@@ -88,7 +130,7 @@ const Reports = () => {
                    <div className='flex justify-between items-center'>
                     <div>
                         <p className='text-gray-500 text-sm'>Total Revenue</p>
-                        <h2 className='text-3xl font-bold text-slate-900'>RS{totalRevenue.toFixed(2)}</h2>
+                        <h2 className='text-3xl font-bold text-slate-900'>RS.{totalRevenue.toFixed(2)}</h2>
                         <p className='text-green-600 text-sm mt-2'>Overall Sales</p>
                     </div>
                     <div className='w-14 h-14 rounded-xl bg-green-100 flex items-center justify-center'>
@@ -137,10 +179,11 @@ const Reports = () => {
             <div className='col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
                 <div className='flex justify-between items-center mb-6'>
                     <h2 className='text-xl font-bold text-slate-900'>Sales Overview</h2>
-                    <select className='border border-gray-300 rounded-lg px-3 py-2 text-sm'>
-                        <option value="">This Month</option>
-                        <option value="">Last Month</option>
-                        <option value="">This Year</option>
+                    <select value={filter} onChange={(e)=> setFilter(e.target.value)} 
+                    className='border border-gray-300 rounded-lg px-3 py-2 text-sm'>
+                        <option value="This Month">This Month</option>
+                        <option value="Last Month">Last Month</option>
+                        <option value="This Year">This Year</option>
                     </select>
                 </div>
                 <div className='h-80'>
@@ -150,7 +193,7 @@ const Reports = () => {
                             <CartesianGrid stroke='#e5e7eb'
                             strokeDasharray="2 2"
                             vertical={false}/>
-                            <XAxis dataKey="month"
+                            <XAxis dataKey={filter === "This Year" ? "month" : "day"}
                             axisLine={false}
                             tickLine={false}/>
                             <YAxis axisLine ={false}
