@@ -35,7 +35,7 @@ const RecentBills = () => {
             <td className='py-3'>Mukesh</td>
             <td className='py-3'>INR 1200</td>
             <td className='py-3'>
-              <span className='bg-red-100 text-red-700 rounded-full py-1 px-3 text-sm font-medium'>Overdue</span>
+              <span className='bg-red-100 text-red-700 rounded-full py-1 px-3 text-sm font-medium'>Unpaid</span>
               </td>
           </tr>
         </tbody>

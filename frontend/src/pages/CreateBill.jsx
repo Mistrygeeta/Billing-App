@@ -152,7 +152,7 @@ const CreateBill = () => {
                 className='w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:border-slate-900'>
                   <option>Pending</option>
                   <option>Paid</option>
-                  <option>Overdue</option>
+                  <option>Unpaid</option>
                 </select>
               </div>
               <div>

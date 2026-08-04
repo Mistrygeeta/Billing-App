@@ -24,33 +24,6 @@ const Reports = () => {
 
     const COLORS = ["#0f172a", "#3b82f6", "#f59e0b"];
     
-    const recentSales = [
-        {
-    invoice: "INV-101",
-    customer: "Rahul Sharma",
-    amount: 2500,
-    status: "Paid",
-  },
-  {
-    invoice: "INV-102",
-    customer: "Priya Verma",
-    amount: 1800,
-    status: "Pending",
-  },
-  {
-    invoice: "INV-103",
-    customer: "Amit Singh",
-    amount: 3200,
-    status: "Paid",
-  },
-  {
-    invoice: "INV-104",
-    customer: "Neha Patel",
-    amount: 1450,
-    status: "Unpaid",
-  },
-];
-
     useEffect(()=>{
         const savedBills = JSON.parse(localStorage.getItem("bills")) || [];
         setBills(savedBills);
@@ -69,6 +42,35 @@ const Reports = () => {
         (sum, bill)=> sum + bill.products.length,
         0
     );
+
+    const recentSales = bills.slice(-5).reverse();
+    const topProducts = [
+  {
+    name: "Laptop",
+    sold: 120,
+    width: "90%"
+  },
+  {
+    name: "Mouse",
+    sold: 95,
+    width: "75%"
+  },
+  {
+    name: "Keyboard",
+    sold: 82,
+    width: "65%"
+  },
+  {
+    name: "Monitor",
+    sold: 61,
+    width: "50%"
+  },
+  {
+    name: "Printer",
+    sold: 40,
+    width: "80%"
+  },
+];
   return (
     <div className='flex min-h-screen bg-gray-100'>
         <Sidebar/>
@@ -209,16 +211,16 @@ const Reports = () => {
                         {recentSales.map((sale, index)=>(
                         <tr key={index}
                         className='border-b border-gray-100 hover:bg-gray-100'>
-                            <td className='py-4 font-medium'>{sale.invoice}</td>
-                            <td>{sale.customer}</td>
-                            <td className='py-4'>Rs.{sale.amount}</td>
+                            <td className='py-4 font-medium'>{sale.invoiceNumber}</td>
+                            <td>{sale.customer.name}</td>
+                            <td className='py-4'>Rs.{sale.grandTotal}</td>
                             <td className='py-4'>
                                 <span className={`px-3 py-1 rounded-full text-xs font-semibold
                                     ${
-                                        sale.status === "Paid"? "bg-green-100 text-green-700"
-                                        : sale.status === "Pending"? "bg-yellow-100 text-yellow-700"
+                                        sale.customer.paymentStatus === "Paid"? "bg-green-100 text-green-700"
+                                        : sale.customer.paymentStatus === "Pending"? "bg-yellow-100 text-yellow-700"
                                         :"bg-red-100 text-red-700"
-                                    }`}>{sale.status}</span>
+                                    }`}>{sale.customer.paymentStatus}</span>
                             </td>
                         </tr>
                         ))}
@@ -229,47 +231,18 @@ const Reports = () => {
         <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
             <h2 className='text-xl font-bold text-slate-900 mb-5'>Top Selling Products</h2>
             <div className='space-y-5'>
-                <div>
+                {topProducts.map((product, index)=>(
+                <div key={index}>
                     <div className='flex justify-between mb-2'>
-                        <span className='font-medium'>Laptop</span>
-                        <span className='text-gray-500'>120 Sold</span>
+                        <span className='font-medium'>{product.name}</span>
+                        <span className='text-gray-500'>{product.sold}</span>
                     </div>
                     <div className='w-full bg-gray-200 rounded-full h-2'>
                         <div className='bg-slate-900 h-2 rounded-full'
-                        style={{width: "90%"}}></div>
+                        style={{width: product.width}}></div>
                     </div>
-                </div>
-                <div>
-                    <div className='flex justify-between mb-2'>
-                        <span className='font-medium'>Mouse</span>
-                        <span className='text-gray-500'>95 Sold</span>
                     </div>
-                    <div className='w-full bg-gray-200 rounded-full h-2'>
-                        <div className='bg-slate-900 h-2 rounded-full'
-                        style={{width: "75%"}}></div>
-                    </div>
-                </div>
-                <div>
-                    <div className='flex justify-between mb-2'>
-                        <span className='font-medium'>Keyboard</span>
-                        <span className='text-gray-500'>82 Sold</span>
-                    </div>
-                    <div className='w-full bg-gray-200 rounded-full h-2'>
-                        <div className='bg-slate-900 h-2 rounded-full'
-                        style={{width: "65%"}}>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div className='flex justify-between mb-2'>
-                        <span className='font-medium'>Monitor</span>
-                        <span className='text-gray-500'>61 Sold</span>
-                    </div>
-                    <div className='w-full bg-gray-200 rounded-full h-2'>
-                        <div className='bg-slate-900 h-2 rounded-full'
-                        style={{width: "50%"}}></div>
-                    </div>
-                </div>
+                ))}
             </div>
         </div>
     </div>
