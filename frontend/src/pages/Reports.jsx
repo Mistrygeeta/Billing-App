@@ -192,6 +192,87 @@ const Reports = () => {
                 </div>
             </div>
         </div>
+    <div className='grid grid-cols-2 gap-6 mt-8'>
+        <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
+            <h2 className='text-xl font-bold text-slate-900 mb-5'>Recent Sales</h2>
+            <div className='overflow-x-auto'>
+                <table className='w-full'>
+                    <thead>
+                        <tr className='border-b border-b-gray-200 text-gray-500 text-sm'>
+                            <th className="text-left pb-3">Invoice</th>
+                            <th className="text-left pb-3">Customer</th>
+                            <th className="text-left pb-3">Amount</th>
+                            <th className="text-left pb-3">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {recentSales.map((sale, index)=>(
+                        <tr key={index}
+                        className='border-b border-gray-100 hover:bg-gray-100'>
+                            <td className='py-4 font-medium'>{sale.invoice}</td>
+                            <td>{sale.customer}</td>
+                            <td className='py-4'>Rs.{sale.amount}</td>
+                            <td className='py-4'>
+                                <span className={`px-3 py-1 rounded-full text-xs font-semibold
+                                    ${
+                                        sale.status === "Paid"? "bg-green-100 text-green-700"
+                                        : sale.status === "Pending"? "bg-yellow-100 text-yellow-700"
+                                        :"bg-red-100 text-red-700"
+                                    }`}>{sale.status}</span>
+                            </td>
+                        </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
+            <h2 className='text-xl font-bold text-slate-900 mb-5'>Top Selling Products</h2>
+            <div className='space-y-5'>
+                <div>
+                    <div className='flex justify-between mb-2'>
+                        <span className='font-medium'>Laptop</span>
+                        <span className='text-gray-500'>120 Sold</span>
+                    </div>
+                    <div className='w-full bg-gray-200 rounded-full h-2'>
+                        <div className='bg-slate-900 h-2 rounded-full'
+                        style={{width: "90%"}}></div>
+                    </div>
+                </div>
+                <div>
+                    <div className='flex justify-between mb-2'>
+                        <span className='font-medium'>Mouse</span>
+                        <span className='text-gray-500'>95 Sold</span>
+                    </div>
+                    <div className='w-full bg-gray-200 rounded-full h-2'>
+                        <div className='bg-slate-900 h-2 rounded-full'
+                        style={{width: "75%"}}></div>
+                    </div>
+                </div>
+                <div>
+                    <div className='flex justify-between mb-2'>
+                        <span className='font-medium'>Keyboard</span>
+                        <span className='text-gray-500'>82 Sold</span>
+                    </div>
+                    <div className='w-full bg-gray-200 rounded-full h-2'>
+                        <div className='bg-slate-900 h-2 rounded-full'
+                        style={{width: "65%"}}>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div className='flex justify-between mb-2'>
+                        <span className='font-medium'>Monitor</span>
+                        <span className='text-gray-500'>61 Sold</span>
+                    </div>
+                    <div className='w-full bg-gray-200 rounded-full h-2'>
+                        <div className='bg-slate-900 h-2 rounded-full'
+                        style={{width: "50%"}}></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
     </div>
     </div>
