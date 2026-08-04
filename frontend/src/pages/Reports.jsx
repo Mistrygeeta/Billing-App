@@ -7,27 +7,28 @@ import {Bar, BarChart, CartesianGrid, Legend, PieChart, ResponsiveContainer, Too
 
 const Reports = () => {
     const [bills, setBills] = useState([]);
-    const salesData= [
-        {month: "Jan", sales: 12000},
-        {month: "Feb", sales: 18000},
-        {month: "Mar", sales: 15000},
-        {month: "Apr", sales: 22000},
-        {month: "May", sales: 28000},
-        {month: "Jun", sales: 25000}
-    ];
-
-    const revenueData = [
-        {name: "Products", value: 55},
-        {name: "Services", value: 25},
-        {name: "Others", value: 20},
-    ];
 
     const COLORS = ["#0f172a", "#3b82f6", "#f59e0b"];
+    const months = ["Jan","Feb","Mar", "Apr","May", "Jun", 
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
     useEffect(()=>{
         const savedBills = JSON.parse(localStorage.getItem("bills")) || [];
         setBills(savedBills);
     },[]);
+
+     const paidRevenue = bills.filter((bill)=> bill.customer.paymentStatus === "Paid")
+    .reduce((sum, bill)=> sum + bill.grandTotal, 0);
+    const pendingRevenue = bills.filter((bill)=> bill.customer.paymentStatus === "Pending")
+    .reduce((sum, bill)=> sum + bill.grandTotal, 0);
+    const unpaidRevenue = bills.filter((bill)=> bill.customer.paymentStatus === "Unpaid")
+    .reduce((sum, bill)=> sum + bill.grandTotal, 0);
+
+    const revenueData = [
+     { name: "Paid", value: paidRevenue },
+     { name: "Pending", value: pendingRevenue },
+     { name: "Unpaid", value: unpaidRevenue },
+    ];
 
     const totalRevenue = bills.reduce(
         (sum, bill) => sum + bill.grandTotal,
@@ -42,35 +43,33 @@ const Reports = () => {
         (sum, bill)=> sum + bill.products.length,
         0
     );
-
+   
     const recentSales = bills.slice(-5).reverse();
-    const topProducts = [
-  {
-    name: "Laptop",
-    sold: 120,
-    width: "90%"
-  },
-  {
-    name: "Mouse",
-    sold: 95,
-    width: "75%"
-  },
-  {
-    name: "Keyboard",
-    sold: 82,
-    width: "65%"
-  },
-  {
-    name: "Monitor",
-    sold: 61,
-    width: "50%"
-  },
-  {
-    name: "Printer",
-    sold: 40,
-    width: "80%"
-  },
-];
+    const productSales = {};
+
+    bills.forEach((bill)=>{
+        console.log(bill.products)
+     bill.products.forEach((product)=>{
+        if(productSales[product.product]){
+            productSales[product.product] += Number(product.qty);
+        }else{
+            productSales[product.product] = Number(product.qty);
+        }
+     })
+    });
+    const topProducts = Object.entries(productSales).map(([name, sold])=>({
+        name, sold,
+    })).sort((a,b)=> b.sold-a.sold).slice(0, 5);
+
+    const salesData = months.map((month, index)=>{
+        const monthlySales = bills.filter((bill)=>{
+            const billDate = new Date(bill.customer.date);
+            return billDate.getMonth() === index;
+        }).reduce((sum, bill)=> sum + bill.grandTotal, 0);
+        return{
+            month, sales: monthlySales,
+        };
+    });
   return (
     <div className='flex min-h-screen bg-gray-100'>
         <Sidebar/>
@@ -239,7 +238,7 @@ const Reports = () => {
                     </div>
                     <div className='w-full bg-gray-200 rounded-full h-2'>
                         <div className='bg-slate-900 h-2 rounded-full'
-                        style={{width: product.width}}></div>
+                        style={{width:topProducts.length > 0 ? `${(product.sold / topProducts[0].sold)* 100}%`:"0%"}}></div>
                     </div>
                     </div>
                 ))}
