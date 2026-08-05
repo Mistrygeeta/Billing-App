@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
 import { MdDelete} from 'react-icons/md';
+import { FaEdit } from 'react-icons/fa';
 import {IoArrowBack} from 'react-icons/io5'
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -9,7 +10,8 @@ const CreateBill = () => {
   const [showProductForm, setShowProductForm] = useState(false);
   const [products, setProducts] = useState([]);
   const [addClicked, setAddClicked] = useState(false);
-  const [bills, setBills] = useState([])
+  const [bills, setBills] = useState([]);
+  const [editProductIndex, setEditProductIndex] = useState(null);
   const [customer, setCustomer] = useState({
     name: "",
     phone: "",
@@ -67,9 +69,20 @@ const CreateBill = () => {
     ){
       return;
     }
-    const updatedProducts = [...products,{...productData,discount: productData.discount||0,}];
-    console.log(updatedProducts);
-    setProducts(updatedProducts);
+    if(editProductIndex !== null){
+      const updatedProducts = [...products];
+
+      updatedProducts[editProductIndex] ={
+        ...productData, discount: productData.discount || 0
+      };
+      setProducts(updatedProducts);
+      setEditProductIndex(null);
+    }else{
+      const updatedProducts = [...products, {
+        ...productData, discount: productData.discount || 0
+      }];
+      setProducts(updatedProducts);
+    }
 
     setProductData({
       product: "",
@@ -236,7 +249,7 @@ const CreateBill = () => {
                   onChange={(e)=>setProductData({...productData, discount: e.target.value,})} placeholder='Discount'
                   className='col-span-2 border border-gray-300 rounded-lg px-3 py-2'/>
                   <button onClick={handleAddProduct} className='col-span-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition '>
-                    Add
+                    {editProductIndex !== null? "Update": "Add"}
                     </button>
                 </div>
                 {products.length>0 && (
@@ -262,10 +275,18 @@ const CreateBill = () => {
                       <td className='p-3'>Rs.{item.discount || 0}</td>
                       <td className='p-3'>Rs.{(Number(item.qty)* Number(item.price)-Number(item.discount||0)).toFixed(2)}</td>
                       <td className='p-3'>
-                        <button onClick={()=>handleDeleteProduct(index)}
-                        className='text-red-600 hover:text-red-800'>
+                      <div className='flex items-center gap-3'>
+                        <button onClick={()=>{
+                          setProductData(products[index]);
+                          setEditProductIndex(index);
+                        }} className='text-blue-600 hover: trxt-blue-800'>
+                          <FaEdit size={18}/>
+                          </button>
+                           <button onClick={()=>handleDeleteProduct(index)}
+                            className='text-red-600 hover:text-red-800'>
                           <MdDelete size={22}/>
                         </button>
+                      </div>
                       </td>
                     </tr>
                     ))}
