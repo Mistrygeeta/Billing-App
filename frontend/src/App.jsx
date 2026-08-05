@@ -18,6 +18,7 @@ function App() {
    <Routes>
     <Route path='/view-bill/:id' element={<ViewBill/>}/>
     <Route path='/create-bill' element={<CreateBill/>}/>
+    <Route path='/edit-bill/:id' element={<CreateBill/>}/>
     <Route path='/print-bill/:id' element={<InvoicePrint/>}/>
     <Route path='/navbar' element={<Navbar/>} />
     <Route path='/products' element={<Products/>}/>

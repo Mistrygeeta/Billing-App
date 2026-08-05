@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
 import { MdDelete} from 'react-icons/md';
 import {IoArrowBack} from 'react-icons/io5'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const CreateBill = () => {
   const [showProductForm, setShowProductForm] = useState(false);
   const [products, setProducts] = useState([]);
   const [addClicked, setAddClicked] = useState(false);
+  const [bills, setBills] = useState([])
   const [customer, setCustomer] = useState({
     name: "",
     phone: "",
@@ -23,6 +24,27 @@ const CreateBill = () => {
     discount: "",
   });
   const navigate = useNavigate();
+  const {id} = useParams();
+  const isEdit = id !== undefined;
+
+  useEffect(()=>{
+    const savedBills = JSON.parse(localStorage.getItem("bills")) || [];
+    setBills(savedBills);
+  }, []);
+
+  useEffect(()=>{
+    if(isEdit && bills.length > 0){
+      const bill = bills[id];
+
+      if(bill){
+      setCustomer(bill.customer);
+      setProducts(bill.products);
+
+      setShowProductForm(true);
+      }
+    }
+  }, [bills, id, isEdit]);
+
   const subtotal = products.reduce((total, item)=>{
     return total+ Number(item.qty)*Number(item.price);
   },0);
@@ -34,7 +56,8 @@ const CreateBill = () => {
   const gst = (subtotal-discount)*0.18;
   const grandTotal = subtotal -discount + gst;
 
-  const invoiceNumber = `INV-${Date.now().toString().slice(-5)}`;
+  const invoiceNumber = isEdit? bills[id]?.invoiceNumber || ""
+  : `INV-${Date.now().toString().slice(-5)}`;
 
   const handleAddProduct =()=>{
     console.log(productData);
@@ -82,9 +105,15 @@ const CreateBill = () => {
       grandTotal,
     };
     const existingBills = JSON.parse(localStorage.getItem("bills")) || [];
-    existingBills.push(newBill);
+    
+    if(isEdit){
+      existingBills[id] = newBill;
+    }else{
+      existingBills.push(newBill);
+    }
     localStorage.setItem("bills", JSON.stringify(existingBills));
-    alert("Bill Saved Successfully");
+
+    alert(isEdit? "Bill Updated Successfully":"Bill Saved Successfully");
 
     setCustomer({
       name: "",
@@ -116,8 +145,12 @@ const CreateBill = () => {
               <IoArrowBack size={24}/>
             </button>
             <div>
-          <h1 className='text-3xl font-bold text-slate-900'>Create New Bill</h1>
-          <p className='text-gray-500 mt-1'>Create invoice for your customer.</p>
+          <h1 className='text-3xl font-bold text-slate-900'>
+            {isEdit ? "Edit Bill" : "Create New Bill"}
+          </h1>
+          <p className='text-gray-500 mt-1'>
+            {isEdit ? "Update customer invoice." : "Create invoice for your customer."}
+          </p>
          </div>
          </div>
           <div className='mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 p-6'>
@@ -268,9 +301,12 @@ const CreateBill = () => {
                   </div>
                 </div>
                 <div className='flex justify-end gap-3 mt-8 pt-4'>
-                  <button className='px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition'>Cancel</button>
+                  <button onClick={()=> navigate("/bills")} 
+                  className='px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition'>Cancel</button>
                   <button onClick={handleSaveBill}
-                  className='px-8 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-700 transition'>Save Bill</button>
+                  className='px-8 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-700 transition'>
+                    {isEdit ? "Update Bill" : "Save Bill"}
+                  </button>
                 </div>
               </div>
               </div>

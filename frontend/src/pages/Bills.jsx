@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
-import {FaClock, FaEye, FaFileInvoiceDollar, FaPlus, FaRupeeSign} from 'react-icons/fa';
+import {FaClock, FaEdit, FaEye, FaFileInvoiceDollar, FaPlus, FaRupeeSign} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { MdDelete } from 'react-icons/md';
 import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
@@ -119,6 +119,9 @@ const Bills = () => {
                       className='p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100' title='View Bill'>
                         <FaEye size={20}/>
                       </button>
+                      <button onClick={()=> navigate(`/edit-bill/${index}`)}
+                      className='p-2 rounded-lg bg-yellow-50 text-yellow-500 hover:bg-yellow-100 transition'
+                      title='Edit Bill'><FaEdit size={18}/></button>
                     <button onClick={()=>{
                       setSelectedBillIndex(index);
                       setShowDeleteModal(true);
