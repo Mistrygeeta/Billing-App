@@ -9,12 +9,18 @@ import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
 const Bills = () => {
   const navigate = useNavigate();
   const [bills, setBills] = useState([]);
+  const [search, setSearch] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedBillIndex, setSelectedBillIndex] = useState(null);
   useEffect(()=>{
     const savedBills = JSON.parse(localStorage.getItem("bills")) || [];
     setBills(savedBills);
   },[]);
+
+  const filteredBills = bills.map((bill,index)=>({bill, originalIndex: index}))
+  .filter(({bill})=>
+  bill.invoiceNumber.toLowerCase().includes(search.toLowerCase()) ||
+  bill.customer.name.toLowerCase().includes(search.toLowerCase()))
 
   const handleDeleteBill = ()=>{
     if(selectedBillIndex === null) return;
@@ -36,7 +42,8 @@ const Bills = () => {
     <div className='flex min-h-screen bg-gray-100'>
         <Sidebar/>
         <div className='ml-60 flex flex-1 flex-col'>
-            <Navbar/>
+            <Navbar search={search}
+            setSearch={setSearch} />
             <div className='flex justify-between items-start px-8 pt-8'>
               <div>
                 <h1 className='text-3xl font-bold text-slate-900'>Bills</h1>
@@ -47,6 +54,7 @@ const Bills = () => {
                 <span>Create Bill</span>
               </button>
             </div>
+            {search === "" &&(
             <div className='grid grid-cols-3 gap-6 px-8 mt-4'>
               <div className='bg-white rounded-2xl shadow-sm p-5 border border-gray-200 hover:shadow-md transition'>
                 <div className='flex justify-between items-center'>
@@ -85,6 +93,7 @@ const Bills = () => {
                 </div>
               </div>
             </div>
+            )}
             <div className='px-8 mt-6'>
             <div className='bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden'>
             <table className='w-full border-collapse'>
@@ -99,9 +108,9 @@ const Bills = () => {
                 </tr>
               </thead>
               <tbody>
-                {bills.length>0?(
-                  bills.map((bill, index)=>(
-                <tr key={index} className='border-b hover:bg-gray-50 transition-colors duration-200'>
+                {filteredBills.length>0?(
+                 filteredBills.map(({bill, originalIndex})=>(
+                <tr key={originalIndex} className='border-b hover:bg-gray-50 transition-colors duration-200'>
                   <td className='p-3' >{bill.invoiceNumber}</td>
                   <td className='p-3'>{bill.customer.name.split(" ").map((word)=>word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}</td>
                   <td className='p-3'>{new Date(bill.customer.date).toLocaleDateString("en-IN")}</td>
@@ -115,15 +124,15 @@ const Bills = () => {
                   </td>
                   <td className='p-3'>
                     <div className='flex items-center gap-2'>
-                      <button onClick={()=> navigate(`/view-bill/${index}`)}
+                      <button onClick={()=> navigate(`/view-bill/${originalIndex}`)}
                       className='p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100' title='View Bill'>
                         <FaEye size={20}/>
                       </button>
-                      <button onClick={()=> navigate(`/edit-bill/${index}`)}
+                      <button onClick={()=> navigate(`/edit-bill/${originalIndex}`)}
                       className='p-2 rounded-lg bg-yellow-50 text-yellow-500 hover:bg-yellow-100 transition'
                       title='Edit Bill'><FaEdit size={18}/></button>
                     <button onClick={()=>{
-                      setSelectedBillIndex(index);
+                      setSelectedBillIndex(originalIndex);
                       setShowDeleteModal(true);
                     }} className='p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition' title='Delete Bill'>
                       <MdDelete size={22}/>
