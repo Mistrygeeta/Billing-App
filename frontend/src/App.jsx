@@ -11,6 +11,7 @@ import CreateBill from './pages/CreateBill';
 import ViewBill from './pages/ViewBill';
 import InvoicePrint from './pages/InvoicePrint';
 import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
     <Route path='/dashboard' element ={<Dashboard />} />
     <Route path='/bills' element = {<Bills/>}/> 
     <Route path='/reports' element={<Reports/>}/>
+    <Route path='/settings' element={<Settings/>} />
    </Routes>
    </BrowserRouter>
   )
