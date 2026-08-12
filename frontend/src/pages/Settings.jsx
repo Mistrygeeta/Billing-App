@@ -9,8 +9,10 @@ const Settings = () => {
         <div className='ml-60 flex flex-1 flex-col'>
             <Navbar/>
             <div className='p-8'>
-                <h1 className='test-3xl font-bold text-slate-900'>Settings</h1>
+                <div>
+                <h1 className='text-3xl font-bold text-slate-900'>Settings</h1>
                 <p className='text-gray-500 mt-1'>Manage Your BillPro settings and preferences.</p>
+                </div>   
             </div>
         </div>
     </div>
