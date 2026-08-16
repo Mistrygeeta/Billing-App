@@ -45,6 +45,61 @@ const Settings = () => {
                     <button className='border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100 transition'>Change Password</button>
                   </div>
                 </div>
+                <div className='mt-6 bg-white border border-gray-200 shadow-sm rounded-2xl p-6'>
+                  <div>
+                    <h2 className='text-xl font-semibold text-slate-900'>Notification Settings</h2>
+                    <p className='text-sm text-gray-500 mt-1'>Manage your notification preferences.</p>
+                  </div>
+                  <div className='mt-6 space-y-4'>
+                    <div className='flex justify-between items-center'>
+                      <div>
+                        <p className='font-medium text-slate-900'>Payment Reminders</p>
+                        <p className='text-sm text-gray-500'>Get reminders for pending payments.</p>
+                      </div>
+                      <input type="checkbox" className='w-5 h-5'/>
+                    </div>
+                    <div className='flex justify-between items-center'>
+                      <div>
+                        <p className='font-medium text-slate-900'>New Bill Notifications</p>
+                        <p className='text-sm text-gray-500'>Get notified when a new bill is created.</p>
+                      </div>
+                      <input type="checkbox" className='w-4 h-4'/>
+                    </div>
+                    <div className='flex justify-between items-center'>
+                      <div>
+                        <p className='font-medium text-slate-900'>Low Stock Alerts</p>
+                        <p className='text-sm text-gray-500'>Get alerts when product stock is low</p>
+                      </div>
+                      <input type="checkbox" className='w-4 h-4'/>
+                    </div>
+                  </div>
+                  </div>
+                  <div className='mt-6 bg-white rounded-2xl border border-gray-200 shadow-sm p-6'>
+                    <div>
+                      <h2 className='text-xl font-semibold text-slate-900'>Appearance Settings</h2>
+                      <p className='text-sm text-gray-500 mt-1'>Customize how BillPro looks and works.</p>
+                    </div>
+                    <div className='mt-6 flex justify-between items-center'>
+                      <div>
+                        <p className='font-medium text-slate-900'>Theme</p>
+                        <p className='text-sm text-gray-500'>Choose your preferred theme.</p>
+                      </div>
+                      <select className='border border-gray-300 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-slate-300'>
+                        <option>Light</option>
+                        <option>Dark</option>
+                      </select>
+                    </div>
+                    <div className='mt-5 flex justify-between items-center'>
+                      <div>
+                        <p className='font-medium text-slate-900'>Language</p>
+                        <p className='text-sm text-gray-500'>Choose your preferred language.</p>
+                      </div>
+                      <select className='border border-gray-300 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-slate-300'>
+                        <option>English</option>
+                        <option>Hindi</option>
+                      </select>
+                    </div>
+                  </div>
             </div>
         </div>
     </div>
