@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
 
 const Settings = () => {
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
   return (
     <div className='flex min-h-screen bg-gray-100 '>
         <Sidebar/>
@@ -16,23 +17,48 @@ const Settings = () => {
                 <div className='mt-6 bg-white rounded-2xl border border-gray-200 shadow-sm p-6'>
                   <div className='flex justify-between items-center'>
                     <div>
-                      <h2 className='text-xl font-semibold text-slate-900'>Profile Setting</h2>
+                      <h2 className='text-xl font-semibold text-slate-900'>Profile Settings</h2>
                       <p className='text-sm text-gray-500 mt-1'>Manage your personal information.</p>
                     </div>
-                    <button className='border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition'>Edit</button>
+                    {isEditingProfile ?(
+                      <div className='flex gap-2'>
+                        <button className='bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition'>Save</button>
+                        <button onClick={()=> setIsEditingProfile(false)}
+                          className='border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100  transition'>Cancel</button>
+                      </div>
+                    ):(
+                      <button onClick={()=> setIsEditingProfile(true)} 
+                    className='border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition'>Edit</button>
+                    )}
+                    
                     </div>
                     <div className='grid grid-cols-3 gap-6 pt-6 border-t border-gray-200'>
                       <div>
                         <p className='text-sm text-gray-500'>Full Name</p>
-                        <p className='mt-1 font-medium text-slate-900'>Geeta</p>
+                        {isEditingProfile ? (
+                          <input type="text" defaultValue="Geeta" 
+                          className='mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 outline-none'/>
+                        ):(
+                          <p className='mt-1 font-medium text-slate-900'>Geeta</p>
+                        )}                        
                       </div>
                       <div>
                         <p className='text-sm text-gray-500'>Email</p>
-                        <p className='mt-1 font-medium text-slate-900'>geeta@geeta.com</p>
+                        {isEditingProfile ?(
+                          <input type="email" defaultValue="geeta@geeta.com"
+                          className='mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 outline-none'/>
+                        ):(
+                         <p className='mt-1 font-medium text-slate-900'>geeta@geeta.com</p>
+                        )}
                       </div>
                       <div>
                         <p className='text-sm text-gray-500'>Phone Number</p>
-                        <p className='mt-1 font-medium text-slate-900'>9876543210</p>
+                        {isEditingProfile ? (
+                          <input type="text" defaultValue="9876543210" 
+                          className='mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 outline-none'/>
+                        ):(
+                          <p className='mt-1 font-medium text-slate-900'>9876543210</p>
+                        )}                        
                       </div>
                     </div> 
                 </div>
@@ -98,6 +124,21 @@ const Settings = () => {
                         <option>English</option>
                         <option>Hindi</option>
                       </select>
+                    </div>
+                  </div>
+                  <div className='mt-6 bg-white rounded-2xl border border-red-200 shadow-sm p-6'>
+                    <div className='flex justify-between items-center'>
+                      <div>
+                        <h2 className='text-xl font-semibold text-red-600'>Danger Zone</h2>
+                        <p className='text-xm text-gray-500 mt-1'>Manage sensitive account actions.</p>
+                      </div>
+                    </div>
+                    <div className='mt-6 pt-5 border-t border-gray-200 flex justify-between items-center'>
+                      <div>
+                        <p className='font-medium text-slate-900'>Delete Account</p>
+                        <p className='text-sm text-gray-500'>Permanently delete your BillPro account and all associated data.</p>
+                      </div>
+                      <button className='border border-red-300 text-red-600 px-4 py-2 rounded-lg hover:bg-red-50 transition'>Delete Account</button>
                     </div>
                   </div>
             </div>
