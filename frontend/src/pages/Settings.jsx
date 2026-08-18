@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
 import ChangePassword from '../components/Settings/ChangePassword';
+import ConfirmModal from '../components/ConfirmModal/ConfirmModal'
 
 const Settings = () => {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -13,7 +14,8 @@ const Settings = () => {
   const [newBillNotifications, setNewBillNotifications] = useState(false);
   const [lowStockAlerts, setLowStockAlerts] = useState(false);
   const [theme, setTheme] = useState("Light")
-  const [language, setLanguage] = useState("English")
+  const [language, setLanguage] = useState("English");
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false)
   return (
     <div className='flex min-h-screen bg-gray-100 '>
         <Sidebar/>
@@ -149,7 +151,7 @@ const Settings = () => {
                     <div className='flex justify-between items-center'>
                       <div>
                         <h2 className='text-xl font-semibold text-red-600'>Danger Zone</h2>
-                        <p className='text-xm text-gray-500 mt-1'>Manage sensitive account actions.</p>
+                        <p className='text-sm text-gray-500 mt-1'>Manage sensitive account actions.</p>
                       </div>
                     </div>
                     <div className='mt-6 pt-5 border-t border-gray-200 flex justify-between items-center'>
@@ -157,11 +159,19 @@ const Settings = () => {
                         <p className='font-medium text-slate-900'>Delete Account</p>
                         <p className='text-sm text-gray-500'>Permanently delete your BillPro account and all associated data.</p>
                       </div>
-                      <button className='border border-red-300 text-red-600 px-4 py-2 rounded-lg hover:bg-red-50 transition'>Delete Account</button>
+                      <button onClick={()=> setIsDeletingAccount(true)} className='border border-red-300 text-red-600 px-4 py-2 rounded-lg hover:bg-red-50 transition'>Delete Account</button>
                     </div>
                   </div>
             </div>
         </div>
+        <ConfirmModal isOpen={isDeletingAccount}
+        title="Delete Account"
+        confirmText='Delete Account'
+        onConfirm={()=>{
+          console.log("Delete account confirmed");
+          setIsDeletingAccount(false)
+        }}
+        onCancel={()=> setIsDeletingAccount(false)}/>
     </div>
   )
 }
