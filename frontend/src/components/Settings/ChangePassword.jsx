@@ -20,7 +20,8 @@ const ChangePassword = ({onCancel}) => {
             currentPassword,
             newPassword,
             confirmPassword
-        })
+        });
+        onCancel();
     }
   return (
     <div className='fixed inset-0 bg-black/40 flex items-center justify-center z-50'>

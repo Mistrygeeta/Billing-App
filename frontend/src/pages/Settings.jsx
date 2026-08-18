@@ -9,6 +9,11 @@ const Settings = () => {
   const [name, setName] = useState("Geeta");
   const [email, setEmail] = useState("geeta@geeta.com");
   const [phone, setPhone] = useState("9876543210");
+  const [paymentReminders, setPaymentReminders] = useState(false);
+  const [newBillNotifications, setNewBillNotifications] = useState(false);
+  const [lowStockAlerts, setLowStockAlerts] = useState(false);
+  const [theme, setTheme] = useState("Light")
+  const [language, setLanguage] = useState("English")
   return (
     <div className='flex min-h-screen bg-gray-100 '>
         <Sidebar/>
@@ -91,21 +96,24 @@ const Settings = () => {
                         <p className='font-medium text-slate-900'>Payment Reminders</p>
                         <p className='text-sm text-gray-500'>Get reminders for pending payments.</p>
                       </div>
-                      <input type="checkbox" className='w-5 h-5'/>
+                      <input type="checkbox" className='w-5 h-5'
+                      checked={paymentReminders} onChange={(e)=> setPaymentReminders(e.target.checked)} />
                     </div>
                     <div className='flex justify-between items-center'>
                       <div>
                         <p className='font-medium text-slate-900'>New Bill Notifications</p>
                         <p className='text-sm text-gray-500'>Get notified when a new bill is created.</p>
                       </div>
-                      <input type="checkbox" className='w-4 h-4'/>
+                      <input type="checkbox" className='w-5 h-5'
+                      checked={newBillNotifications} onChange={(e)=> setNewBillNotifications(e.target.checked)} />
                     </div>
                     <div className='flex justify-between items-center'>
                       <div>
                         <p className='font-medium text-slate-900'>Low Stock Alerts</p>
                         <p className='text-sm text-gray-500'>Get alerts when product stock is low</p>
                       </div>
-                      <input type="checkbox" className='w-4 h-4'/>
+                      <input type="checkbox" className='w-5 h-5'
+                      checked={lowStockAlerts} onChange={(e)=> setLowStockAlerts(e.target.checked)}/>
                     </div>
                   </div>
                   </div>
@@ -119,7 +127,8 @@ const Settings = () => {
                         <p className='font-medium text-slate-900'>Theme</p>
                         <p className='text-sm text-gray-500'>Choose your preferred theme.</p>
                       </div>
-                      <select className='border border-gray-300 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-slate-300'>
+                      <select value={theme} onChange={(e)=> setTheme(e.target.value)} 
+                      className='border border-gray-300 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-slate-300'>
                         <option>Light</option>
                         <option>Dark</option>
                       </select>
@@ -129,7 +138,8 @@ const Settings = () => {
                         <p className='font-medium text-slate-900'>Language</p>
                         <p className='text-sm text-gray-500'>Choose your preferred language.</p>
                       </div>
-                      <select className='border border-gray-300 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-slate-300'>
+                      <select value={language} onChange={(e)=> setLanguage(e.target.value)} 
+                      className='border border-gray-300 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-slate-300'>
                         <option>English</option>
                         <option>Hindi</option>
                       </select>
