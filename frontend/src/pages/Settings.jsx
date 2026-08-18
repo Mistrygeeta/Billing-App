@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
+import ChangePassword from '../components/Settings/ChangePassword';
 
 const Settings = () => {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [name, setName] = useState("Geeta");
+  const [email, setEmail] = useState("geeta@geeta.com");
+  const [phone, setPhone] = useState("9876543210");
   return (
     <div className='flex min-h-screen bg-gray-100 '>
         <Sidebar/>
@@ -22,7 +27,8 @@ const Settings = () => {
                     </div>
                     {isEditingProfile ?(
                       <div className='flex gap-2'>
-                        <button className='bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition'>Save</button>
+                        <button onClick={()=> setIsEditingProfile(false)} 
+                        className='bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition'>Save</button>
                         <button onClick={()=> setIsEditingProfile(false)}
                           className='border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100  transition'>Cancel</button>
                       </div>
@@ -36,28 +42,28 @@ const Settings = () => {
                       <div>
                         <p className='text-sm text-gray-500'>Full Name</p>
                         {isEditingProfile ? (
-                          <input type="text" defaultValue="Geeta" 
+                          <input type="text" value={name} onChange={(e)=> setName(e.target.value)}
                           className='mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 outline-none'/>
                         ):(
-                          <p className='mt-1 font-medium text-slate-900'>Geeta</p>
+                          <p className='mt-1 font-medium text-slate-900'>{name}</p>
                         )}                        
                       </div>
                       <div>
                         <p className='text-sm text-gray-500'>Email</p>
                         {isEditingProfile ?(
-                          <input type="email" defaultValue="geeta@geeta.com"
+                          <input type="email" value={email} onChange={(e)=> setEmail(e.target.value)}
                           className='mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 outline-none'/>
                         ):(
-                         <p className='mt-1 font-medium text-slate-900'>geeta@geeta.com</p>
+                         <p className='mt-1 font-medium text-slate-900'>{email}</p>
                         )}
                       </div>
                       <div>
                         <p className='text-sm text-gray-500'>Phone Number</p>
                         {isEditingProfile ? (
-                          <input type="text" defaultValue="9876543210" 
+                          <input type="text" value={phone} onChange={(e)=> setPhone(e.target.value)}
                           className='mt-1 w-full border border-gray-300 rounded-lg px-4 py-2 outline-none'/>
                         ):(
-                          <p className='mt-1 font-medium text-slate-900'>9876543210</p>
+                          <p className='mt-1 font-medium text-slate-900'>{phone}</p>
                         )}                        
                       </div>
                     </div> 
@@ -68,8 +74,11 @@ const Settings = () => {
                       <h2 className='text-xl font-semibold text-slate-900'>Security Settings</h2>
                       <p className='text-sm text-gray-500 mt-1'>Manage your account security</p>
                     </div>
-                    <button className='border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100 transition'>Change Password</button>
+                    <button onClick={()=> setIsChangingPassword(true)} 
+                    className='border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100 transition'>Change Password</button>
                   </div>
+                  {isChangingPassword && (
+                    <ChangePassword onCancel={()=> setIsChangingPassword(false)} />)}                  
                 </div>
                 <div className='mt-6 bg-white border border-gray-200 shadow-sm rounded-2xl p-6'>
                   <div>
