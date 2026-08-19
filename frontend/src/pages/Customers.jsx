@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
-import { FaPlus, FaSearch } from 'react-icons/fa';
+import { FaPlus} from 'react-icons/fa';
+import Modal from '../components/Modal/Modal';
+import ConfirmModal from '../components/ConfirmModal/ConfirmModal'
 
 const Customers = () => {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [customerData, setCustomerData] = useState({
@@ -46,30 +47,30 @@ const resetForm = ()=>{
     address: "",
   });
 
-  setIsEditing(false);
   setEditIndex(null);
 }
 
-const handleAddCustomer =()=>{
+const handleSubmitCustomer =()=>{
 if(
   customerData.name === ""|| customerData.phone === ""|| customerData.email === ""|| customerData.address === ""
 ){
 alert("please fill all fields");
 return;
 }
-if (isEditing) {
+if (editIndex !==null) {
   const updatedCustomers = [...customers];
   updatedCustomers[editIndex] = customerData;
   setCustomers(updatedCustomers);
 }else{
-const newCustomer ={
-  name: customerData.name,
-  phone: customerData.phone,
-  email: customerData.email,
-  address: customerData.address,
-};
+    const newCustomer = {
+      name: customerData.name,
+      phone: customerData.phone,
+      email: customerData.email,
+      address: customerData.address,
+    };
 setCustomers([...customers, newCustomer]);
 }
+setSearch("");
 setShowModal(false);
 resetForm();
 };
@@ -77,7 +78,6 @@ resetForm();
 const handleEdit = (index)=>{
   setCustomerData({...customers[index]});
   setEditIndex(index);
-  setIsEditing(true);
   setShowModal(true);
 };
 
@@ -104,57 +104,55 @@ const cancelDelete = ()=>{
   setShowDeleteModal(false);
 };
 
-  const filteredCustomers = customers.filter((customer)=>
+  const filteredCustomers = customers.map((customer, index)=>({
+    customer, originalIndex: index
+  })).filter(({customer})=>
   customer.name.toLowerCase().includes(search.toLowerCase())||
-  customer.phone.includes(search))
+  customer.phone.includes(search) ||
+  customer.email.toLowerCase().includes(search.toLowerCase()));
   
   return (
     <div className='flex min-h-screen bg-gray-100'>
       <Sidebar/>
       <div className='ml-60 flex-1'>
-        <Navbar/>
+        <Navbar search={search} setSearch={setSearch}/>
         <div className='p-8'>
-          <h2 className='text-3xl font-bold text-slate-900'>Customers</h2>
-          <p className='text-gray-500 mt-1'>Manage all your customers here.</p>
-          <div className='flex justify-between items-center mt-8'>
-            <div className='relative'>
-              <FaSearch className='absolute top-1/2 left-3 -translate-y-1/2 text-gray-400'/>
-                <input type="text" placeholder='Search Customer' value={search} onChange={(e)=> setSearch(e.target.value)}
-                className='border border-gray-300 py-2 pl-10 pr-4 w-96 rounded-lg outline-none' />
-            </div>
+          <div className='flex justify-between items-center'>
             <div>
-              <button onClick={()=>{resetForm();
-                setShowModal(true)}} className='bg-slate-900 text-white rounded-lg px-5 py-2 cursor-pointer flex items-center gap-2 hover:bg-slate-700 transition'>
+             <h2 className='text-3xl font-bold text-slate-900'>Customers</h2>
+             <p className='text-gray-500 mt-1'>Manage and track all your customers here.</p>
+            </div>
+            <button onClick={()=>{resetForm();
+                setShowModal(true)}} className='bg-slate-900 text-white rounded-lg px-5 py-2.5 cursor-pointer flex items-center gap-2 hover:bg-slate-700 transition'>
                 <FaPlus/>
                 <span>Add Customer</span>
               </button>
-            </div>
           </div>
-          <div className='mt-8 bg-white rounded-lg shadow-md overflow-hidden'>
+          <div className='mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden'>
             <table className='w-full border-collapse'>
-              <thead className='bg-gray-100'>
-                <tr className='border-b'>
-                  <th className='p-3 text-left font-semibold text-gray-700'>Customer Name</th>
-                  <th className='p-3 text-left font-semibold text-gray-700'>Phone</th>
-                  <th className='p-3 text-left font-semibold text-gray-700'>Email</th>
-                  <th className='p-3 text-left font-semibold text-gray-700'>Address</th>
-                  <th className='p-3 text-left font-semibold text-gray-700'>Action</th>
+              <thead className='bg-slate-50'>
+                <tr className='border-b border-gray-200'>
+                  <th className='px-5 py-4 text-left font-semibold text-gray-700'>Customer Name</th>
+                  <th className='px-5 py-4 text-left font-semibold text-gray-700'>Phone</th>
+                  <th className='px-5 py-4 text-left font-semibold text-gray-700'>Email</th>
+                  <th className='px-5 py-4 text-left font-semibold text-gray-700'>Address</th>
+                  <th className='px-5 py-4 text-left font-semibold text-gray-700'>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredCustomers.length > 0 ?(
-                filteredCustomers.map((customer, index)=>(
-                <tr key={index} className='border-b hover:bg-gray-50 transition'>
-                  <td className='p-3 text-gray-800 font-semibold'>{customer.name}</td>
-                  <td className='p-3 font-mono text-gray-800'>{customer.phone}</td>
-                  <td className='p-3 text-gray-600'>{customer.email} </td>
-                  <td className='p-3 text-gray-800'>{customer.address} </td>
-                  <td className='p-3'>
+                filteredCustomers.map(({customer, originalIndex})=>(
+                <tr key={originalIndex} className='border-b border-gray-100 hover:bg-gray-50 transition'>
+                  <td className='px-5 py-4'><span className='font-medium text-slate-900'>{customer.name}</span></td>
+                  <td className='px-5 py-4 text-gray-800'>{customer.phone}</td>
+                  <td className='px-5 py-4 text-gray-600'>{customer.email} </td>
+                  <td className='px-5 py-4 text-gray-800'>{customer.address} </td>
+                  <td className='px-5 py-4'>
                     <div className='flex gap-2'>
-                      <button onClick={()=> handleEdit(index)} className='bg-blue-500 text-white rounded-md px-4 py-1 hover:bg-blue-600 transition'>
+                      <button onClick={()=> handleEdit(originalIndex)} className='bg-blue-500 text-white rounded-md px-4 py-1 hover:bg-blue-600 transition'>
                         Edit
                       </button>
-                      <button onClick={()=>handleDelete(index)} className='bg-red-500 text-white rounded-md px-4 py-1 hover:bg-red-600 transition'>
+                      <button onClick={()=>handleDelete(originalIndex)} className='bg-red-500 text-white rounded-md px-4 py-1 hover:bg-red-600 transition'>
                         Delete
                         </button>
                     </div>
@@ -172,11 +170,15 @@ const cancelDelete = ()=>{
         </div>
       </div>
       {showModal && (
-        <div className='fixed inset-0 bg-black/40 flex items-center justify-center'>
-          <div className='bg-white rounded-xl p-6 w-[500px] shadow-xl '>
-            <h2 className='text-2xl font-bold text-slate-900'>{isEditing?"Edit Customer":"Add Customer"}</h2>
-            <p className='text-gray-500 mt-2'>Enter customer details</p>
-          <div className='mt-6'>
+        <Modal title={editIndex !==null? "Edit Customer" :"Add Customer"}
+        subtitle="Enter customer details" 
+        onClose={()=>{
+          resetForm();
+          setShowModal(false);
+        }}
+        onSubmit={handleSubmitCustomer}
+        submitText={editIndex !==null ? "Update Customer" : "Add Customer"}>
+          <div>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Customer Name</label>
             <input type="text" name='name' value={customerData.name} onChange={handleChange} placeholder='Enter customer name' 
             className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900' />
@@ -184,7 +186,7 @@ const cancelDelete = ()=>{
           <div className='mt-4'>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Phone Number</label>
             <input type="text" name='phone' value={customerData.phone} onChange={handleChange} 
-            placeholder='Enter phone number' className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'/>
+            placeholder='Enter phone number' maxLength="10" className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'/>
           </div>
           <div className='mt-4'>
             <label className='block text-sm font-medium mb-2 text-gray-700'>Email</label>
@@ -196,30 +198,16 @@ const cancelDelete = ()=>{
             placeholder='Enter address' 
             className='w-full border border-gray-300 px-4 py-2 rounded-lg outline-none focus:border-slate-900 resize-none'></textarea>
           </div>
-          <div className='flex justify-end gap-3 mt-6'>
-            <button onClick={handleCancel} className='px-4 py-2 border border-red-500 text-red-600  rounded-lg hover:bg-red-600 hover:text-white transition cursor-pointer'>
-              Cancel
-              </button>
-            <button onClick={handleAddCustomer} className='px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-700 transition cursor-pointer'>
-              {isEditing? "Update Customer":"Add Customer"}
-              </button>
-          </div>
-          </div>
-        </div>
+        </Modal>
       )}
 
-      {showDeleteModal && (
-        <div className='fixed inset-0 bg-black/40 flex justify-center items-center'>
-          <div className='w-[400px] bg-white rounded-xl p-8 shadow-xl'>
-            <h2 className='text-red-500 font-bold text-2xl'>Delete Customer</h2>
-            <p className='text-gray-800 mt-4 text-center' >Are you sure you want to delete this?</p>
-            <div className='flex justify-end gap-5 mt-8'>
-              <button onClick={cancelDelete} className='border border-gray-400 px-4 py-2 rounded-lg hover:bg-gray-100 cursor-pointer '>Cancel</button>
-              <button onClick={confirmDeleteCustomer} className='bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 cursor-pointer'>Delete</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmModal
+      isOpen={showDeleteModal}
+      title="Delete Customer"
+      confirmText='Delete'
+      cancelText='Cancel'
+      onConfirm={confirmDeleteCustomer}
+      onCancel={cancelDelete}/>
     </div>
   )
 }
