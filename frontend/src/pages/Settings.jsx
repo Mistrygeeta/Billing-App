@@ -129,7 +129,9 @@ const Settings = () => {
                         <p className='font-medium text-slate-900'>Theme</p>
                         <p className='text-sm text-gray-500'>Choose your preferred theme.</p>
                       </div>
-                      <select value={theme} onChange={(e)=> setTheme(e.target.value)} 
+                      <select value={theme} onChange={(e)=> {setTheme(e.target.value);
+                        console.log("Theme:", e.target.value)}
+                      } 
                       className='border border-gray-300 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-slate-300'>
                         <option>Light</option>
                         <option>Dark</option>
@@ -140,7 +142,9 @@ const Settings = () => {
                         <p className='font-medium text-slate-900'>Language</p>
                         <p className='text-sm text-gray-500'>Choose your preferred language.</p>
                       </div>
-                      <select value={language} onChange={(e)=> setLanguage(e.target.value)} 
+                      <select value={language} onChange={(e)=> {setLanguage(e.target.value);
+                        console.log("Language:", e.target.value)
+                      }} 
                       className='border border-gray-300 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-slate-300'>
                         <option>English</option>
                         <option>Hindi</option>
@@ -166,7 +170,7 @@ const Settings = () => {
         </div>
         <ConfirmModal isOpen={isDeletingAccount}
         title="Delete Account"
-        confirmText='Delete Account'
+        confirmText='Delete'
         onConfirm={()=>{
           console.log("Delete account confirmed");
           setIsDeletingAccount(false)

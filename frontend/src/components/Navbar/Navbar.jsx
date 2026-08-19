@@ -1,14 +1,9 @@
 import { useState } from "react";
 import {FaSearch, FaUserCircle,FaBell} from "react-icons/fa"
-
+import Logout from "../Auth/Logout";
 const Navbar = (props) => {
   const [showProfile, setShowProfile] = useState(false);
 
-  const handleLogout = ()=>{
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/login";
-  }
   return (
     <nav className="flex justify-between items-center h-16 px-8 bg-white shadow-sm sticky top-0 z-50">
       <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 gap-2 flex-1 max-w-lg hover:bg-slate-50 focus-within:ring-2 focus-within:ring-slate-300 transition">
@@ -34,9 +29,9 @@ const Navbar = (props) => {
           <p className="font-medium text-slate-900">Geeta</p>
           <p className="text-xs text-gray-500 mt-1">Admin</p>
          </div>
-         <button onClick={handleLogout} className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-500 hover:text-white transition">
+         <Logout className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-500 hover:text-white transition">
           Logout
-         </button>
+         </Logout>
             </div>
           )}
         </div>
