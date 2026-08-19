@@ -10,7 +10,7 @@ const Modal = ({
 }) => {
   return (
     <div className='fixed inset-0 bg-black/40 flex justify-center items-center z-50 p-4'>
-        <div className='bg-white rounded-xl p-7 w-[500px] shadow-2xl max-h-[90vh] overflow-hidden '>
+        <div className='bg-white rounded-xl p-7 w-[500px] shadow-2xl max-h-[90vh] overflow-y-hidden '>
             <div>
                 <h2 className='text-2xl font-bold text-slate-900'>{title}</h2>
                 <p className='text-gray-500 mt-1'>{subtitle}</p>

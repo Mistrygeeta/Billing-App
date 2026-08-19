@@ -3,8 +3,10 @@ import Navbar from '../components/Navbar/Navbar';
 import Sidebar from '../components/Sidebar/Sidebar';
 import {FaPlus} from 'react-icons/fa'
 import Modal from '../components/Modal/Modal';
+import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
 
 const Products = () => {
+  const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -118,12 +120,17 @@ const resetForm = ()=>{
     stock: "",
   });
 }
+  const filteredProducts = products.map((product, index) =>({
+    product, originalIndex: index
+  })).filter(({product})=>
+  product.name.toLowerCase().includes(search.toLowerCase()) ||
+  product.category.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className='min-h-screen bg-gray-100 flex' >
       <Sidebar/>
       <div className='ml-60 flex-1 flex flex-col'>
-        <Navbar/>
+        <Navbar search={search} setSearch={setSearch} />
     <div className='p-8'>
       <div className='flex justify-between items-center'>
         <div>
@@ -152,8 +159,8 @@ const resetForm = ()=>{
           </thead>
 
           <tbody>
-            {products.length > 0 ?(products.map((product, index) =>(
-            <tr key={index} className="border-b hover:bg-gray-50 transition">
+            {filteredProducts.length > 0 ?(filteredProducts.map(({product, originalIndex}) =>(
+            <tr key={originalIndex} className="border-b hover:bg-gray-50 transition">
              <td className="px-5 py-4"><span className='font-medium text-slate-900'>{product.name}</span></td>
              <td className="px-5 py-4 text-gray-700">{product.category}</td>
              <td className="px-5 py-4 text-gray-700">{product.price} </td>
@@ -165,12 +172,12 @@ const resetForm = ()=>{
               <span className='bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium'>Out of Stock</span>
              )} </td>
              <td className="px-5 py-3">
-              <div className="flex gap-4">
-                 <button onClick={()=>handleEditProduct(index)} 
+              <div className="flex gap-2">
+                 <button onClick={()=>handleEditProduct(originalIndex)} 
                  className="bg-blue-500 text-white px-4 py-1.5 rounded-md hover:bg-blue-600 transition cursor-pointer">
                   Edit
                   </button>
-                  <button onClick={()=> handleDeleteProduct(index)} 
+                  <button onClick={()=> handleDeleteProduct(originalIndex)} 
                   className="bg-red-500 text-white px-4 py-1.5 rounded-md hover:bg-red-600 transition cursor-pointer">
                     Delete
                     </button>
@@ -226,20 +233,12 @@ const resetForm = ()=>{
           </div>
       </Modal>
      )}
-     {showDeleteModal && (
-      <div className='fixed inset-0 bg-black/40 flex justify-center items-center'>
-        <div className='w-[400px] bg-white rounded-xl p-8 shadow-xl'>
-          <h2 className='text-2xl text-red-500 font-bold'>Delete Product</h2>
-          <p className='text-gray-800 mt-4 text-center'>Are you sure you want to delete this product?</p>
-          <div className='flex justify-end gap-5 mt-8'>
-            <button onClick={cancelDelete} className='border border-gray-400 px-4 py-2 rounded-lg hover:bg-gray-100 cursor-pointer'>
-              Cancel
-              </button>
-            <button onClick={confirmDeleteProduct} className='bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 cursor-pointer'>Delete</button>
-          </div>
-        </div>
-      </div>
-     )}
+     <ConfirmModal isOpen={showDeleteModal}
+     title="Delete Product"
+     confirmText='Delete'
+     cancelText='Cancel'
+     onConfirm={confirmDeleteProduct}
+     onCancel={cancelDelete}/>
      </div>
   );
 };
