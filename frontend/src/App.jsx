@@ -13,17 +13,18 @@ import InvoicePrint from './pages/InvoicePrint';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import RevenueChart from './components/Dashboard/RevenueChart';
+import Profile from './pages/Profile';
 
 function App() {
   return (
    <BrowserRouter>
    <Routes>
-    <Route path='/revenue-chart' element={<RevenueChart/>}/>
     <Route path='/view-bill/:id' element={<ViewBill/>}/>
     <Route path='/create-bill' element={<CreateBill/>}/>
     <Route path='/edit-bill/:id' element={<CreateBill/>}/>
     <Route path='/print-bill/:id' element={<InvoicePrint/>}/>
     <Route path='/navbar' element={<Navbar/>} />
+    <Route path='/profile' element={<Profile/>}/>
     <Route path='/products' element={<Products/>}/>
     <Route path='/customers' element={<Customers/>}/>
     <Route path='/login' element={<Login />} />
