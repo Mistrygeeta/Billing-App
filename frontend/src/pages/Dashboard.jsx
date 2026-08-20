@@ -6,8 +6,10 @@ import { FaBox,FaUsers, FaFileInvoiceDollar, FaRupeeSign } from 'react-icons/fa'
 import RecentBills from '../components/Dashboard/RecentBills';
 import RecentActivity from '../components/Dashboard/RecentActivity';
 import RevenueChart from '../components/Dashboard/RevenueChart';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <Sidebar />
@@ -19,15 +21,16 @@ const Dashboard = () => {
           <h1 className='text-3xl font-bold text-gray-800 '>Dashboard Overview</h1>
           <p className='text-gray-500 mt-1'>Welcome back Geeta</p>
         </div>
-        <button className='bg-slate-900 text-white px-3 py-2 rounded-lg hover:bg-slate-700'>
+        <button onClick={()=> navigate("/create-bill")} 
+        className='bg-slate-900 text-white px-3 py-2 rounded-lg hover:bg-slate-700'>
           + New Invoice
         </button>
        </div>
        <div className='grid grid-cols-4 gap-4 mt-3' >
-          <StatCard title= "Products" value="120" icon ={<FaBox/>}/>
-          <StatCard title="Customers" value= "30" icon={<FaUsers />} />
-          <StatCard title="Bills" value ="500" icon ={<FaFileInvoiceDollar />} />
-          <StatCard  title="Revenue" value= "INR 50,000" icon= {<FaRupeeSign />} />
+          <StatCard title= "Products" value="120" icon ={<FaBox/>} change="+8.2%"/>
+          <StatCard title="Customers" value= "30" icon={<FaUsers />} change="+5.4%" />
+          <StatCard title="Bills" value ="500" icon ={<FaFileInvoiceDollar />} change="+12.5%" />
+          <StatCard  title="Revenue" value= "INR 50,000" icon= {<FaRupeeSign />} change="+18.7%" />
         </div>
         <div className='grid grid-cols-3 gap-6 mt-6'>
           <div className='col-span-2'>
