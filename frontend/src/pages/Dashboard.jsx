@@ -5,6 +5,7 @@ import StatCard from '../components/Dashboard/StatCard';
 import { FaBox,FaUsers, FaFileInvoiceDollar, FaRupeeSign } from 'react-icons/fa';
 import RecentBills from '../components/Dashboard/RecentBills';
 import RecentActivity from '../components/Dashboard/RecentActivity';
+import RevenueChart from '../components/Dashboard/RevenueChart';
 
 const Dashboard = () => {
   return (
@@ -27,6 +28,44 @@ const Dashboard = () => {
           <StatCard title="Customers" value= "30" icon={<FaUsers />} />
           <StatCard title="Bills" value ="500" icon ={<FaFileInvoiceDollar />} />
           <StatCard  title="Revenue" value= "INR 50,000" icon= {<FaRupeeSign />} />
+        </div>
+        <div className='grid grid-cols-3 gap-6 mt-6'>
+          <div className='col-span-2'>
+          <RevenueChart/>
+          </div>
+          <div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6'>
+            <h2 className='text-lg font-semibold text-slate-900'>Sales Summary</h2>
+            <p className='text-sm text-gray-500 mt-1'>This month's performance</p>
+            <div className='mt-6 space-y-5'>
+              <div>
+                <div className='flex justify-between mb-2'>
+                  <span className='text-sm text-gray-600'>Total Sales</span>
+                  <span className='font-semibold text-slate-900'>Rs. 35,000</span>
+                </div>
+                <div className='h-2 bg-gray-100 rounded-full'>
+                  <div className='h-2 bg-slate-900 rounded-full w-[75%]'></div>
+                </div>
+              </div>
+              <div>
+                <div className='flex justify-between mb-2'>
+                  <span className='text-sm text-gray-600'>Paid Bills</span>
+                  <span className='font-semibold text-slate-900'>42</span>
+                </div>
+                <div className='h-2 bg-gray-100 rounded-full'>
+                  <div className='h-2 bg-green-500 rounded-full w-[85%]'></div>
+                </div>
+              </div>
+              <div>
+                <div className='flex justify-between mb-2'>
+                  <span className='text-sm text-gray-500'>Pending Bills</span>
+                  <span className='font-semibold text-slate-900'>8</span>
+                </div>
+                <div className='h-2 bg-gray-200 rounded-full'>
+                  <div className='h-2 bg-yellow-500 rounded-full w-[35%]'></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div className='grid grid-cols-3 gap-6 mt-6 '>
           <div className='col-span-2'>

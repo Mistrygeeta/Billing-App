@@ -12,11 +12,13 @@ import ViewBill from './pages/ViewBill';
 import InvoicePrint from './pages/InvoicePrint';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import RevenueChart from './components/Dashboard/RevenueChart';
 
 function App() {
   return (
    <BrowserRouter>
    <Routes>
+    <Route path='/revenue-chart' element={<RevenueChart/>}/>
     <Route path='/view-bill/:id' element={<ViewBill/>}/>
     <Route path='/create-bill' element={<CreateBill/>}/>
     <Route path='/edit-bill/:id' element={<CreateBill/>}/>
