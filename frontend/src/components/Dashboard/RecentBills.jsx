@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 const RecentBills = () => {
   return (
-    <div className='bg-white border border-gray-200 shadow-sm p-6 rounded-xl'>
+    <div className='bg-white border border-gray-200 shadow-sm p-6 rounded-xl h-full'>
       <div className='flex justify-between items-center mb-5'>
         <div>
          <h2 className='text-xl font-semibold text-slate-900'>Recent Bills</h2>
