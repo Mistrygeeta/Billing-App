@@ -1,6 +1,6 @@
 import {FaBox,FaUsers,FaFileInvoiceDollar,FaChartBar,FaCog, FaSignOutAlt} from 'react-icons/fa'
 import { MdDashboard } from "react-icons/md";
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import Logout from '../Auth/Logout';
 const Sidebar = () => {
   return (
@@ -12,40 +12,52 @@ const Sidebar = () => {
         <div className='px-3 font-medium'>
             <ul >
                 <li >
-                    <Link to="/dashboard" className='flex items-center gap-2 mt-4  px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg '>
+                    <NavLink to="/dashboard" className={({isActive})=>
+                    `flex items-center gap-2 mt-4  px-4 py-3 cursor-pointer rounded-lg transition
+                    ${isActive? "bg-slate-700 text-white":"text-white hover:bg-slate-700 hover:text-white"}`}>
                     <MdDashboard />
                     Dashboard
-                    </Link>
+                    </NavLink>
                 </li>
                 <li >
-                    <Link to="/products" className='flex items-center gap-2  px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg'>
+                    <NavLink to="/products" className={({isActive})=>
+                    `flex items-center gap-2  px-4 py-3 cursor-pointer rounded-lg transition
+                    ${isActive ? "bg-slate-700 text-white":"text-white hover:bg-slate-700 hover:text-white"}`}>
                     <FaBox />
                     Products
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/customers" className='flex items-center gap-2 px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg'>
+                    <NavLink to="/customers" className={({isActive})=>
+                    `flex items-center gap-2 px-4 py-3 cursor-pointer rounded-lg transition 
+                    ${isActive ? "bg-slate-700 text-white":"text-white hover:bg-slate-700 hover:text-white"}`}>
                     <FaUsers />
                     Customers
-                    </Link>
+                    </NavLink>
                 </li>
                 <li >
-                    <Link to="/bills" className='flex items-center gap-2 px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg'>
+                    <NavLink to="/bills" className={({isActive})=>
+                    `flex items-center gap-2 px-4 py-3 cursor-pointer rounded-lg transition 
+                    ${isActive? "bg-slate-700 text-white":"text-white hover:bg-slate-700 hover:text-white"}`}>
                     <FaFileInvoiceDollar />
                     Bills
-                    </Link>
+                    </NavLink>
                 </li>
                 <li>
-                   <Link to="/reports" className='flex items-center gap-2 px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg'>
+                   <NavLink to="/reports" className={({isActive})=>
+                    `flex items-center gap-2 px-4 py-3 cursor-pointer rounded-lg transition
+                    ${isActive ? "bg-slate-700 text-white":"text-white hover:bg-slate-700 hover:text-white"}`}>
                     <FaChartBar/>
                     Reports
-                    </Link>
+                    </NavLink>
                 </li>
                 <li >
-                   <Link to="/settings" className='flex items-center gap-2 px-4 py-3 hover:bg-slate-700 cursor-pointer rounded-lg'>
+                   <NavLink to="/settings" className={({isActive})=>
+                   `flex items-center gap-2 px-4 py-3 cursor-pointer rounded-lg transition 
+                   ${isActive? "bg-slate-700 text-white":"text-white hover:bg-slate-700 hover:text-white"}`}>
                     <FaCog />
                     Settings
-                    </Link>
+                    </NavLink>
                 </li>
             </ul>
         </div>
