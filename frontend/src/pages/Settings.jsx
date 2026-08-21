@@ -5,6 +5,7 @@ import ChangePassword from '../components/Settings/ChangePassword';
 import ConfirmModal from '../components/ConfirmModal/ConfirmModal'
 
 const Settings = () => {
+  const [search, setSearch] = useState("");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [name, setName] = useState("Geeta");
@@ -15,18 +16,24 @@ const Settings = () => {
   const [lowStockAlerts, setLowStockAlerts] = useState(false);
   const [theme, setTheme] = useState("Light")
   const [language, setLanguage] = useState("English");
-  const [isDeletingAccount, setIsDeletingAccount] = useState(false)
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const showSection =(keywords)=>{
+    if(!search.trim()) return true;
+
+    return keywords.some((keyword)=>
+    keyword.toLowerCase().includes(search.toLowerCase()));
+  };
   return (
     <div className='flex min-h-screen bg-gray-100 '>
         <Sidebar/>
         <div className='ml-60 flex flex-1 flex-col'>
-            <Navbar/>
+            <Navbar search={search} setSearch={setSearch} />
             <div className='p-8'>
                 <div>
                 <h1 className='text-3xl font-bold text-slate-900'>Settings</h1>
                 <p className='text-gray-500 mt-1'>Manage Your BillPro settings and preferences.</p>
                 </div>   
-                <div className='mt-6 bg-white rounded-2xl border border-gray-200 shadow-sm p-6'>
+               {showSection(["profile", "personal", "name", "email", "phone"])&& (<div className='mt-6 bg-white rounded-2xl border border-gray-200 shadow-sm p-6'>
                   <div className='flex justify-between items-center'>
                     <div>
                       <h2 className='text-xl font-semibold text-slate-900'>Profile Settings</h2>
@@ -74,7 +81,8 @@ const Settings = () => {
                         )}                        
                       </div>
                     </div> 
-                </div>
+                </div>)}
+               {showSection(["security", "password", "change password"])&& (
                 <div className='mt-6 bg-white rounded-2xl border border-gray-200 shadow-sm p-6'>
                   <div className='flex justify-between items-center'>
                     <div>
@@ -86,7 +94,8 @@ const Settings = () => {
                   </div>
                   {isChangingPassword && (
                     <ChangePassword onCancel={()=> setIsChangingPassword(false)} />)}                  
-                </div>
+                </div>)}
+               {showSection(["notification", "payment reminders", "new bill", "low stock"])&& (
                 <div className='mt-6 bg-white border border-gray-200 shadow-sm rounded-2xl p-6'>
                   <div>
                     <h2 className='text-xl font-semibold text-slate-900'>Notification Settings</h2>
@@ -118,7 +127,8 @@ const Settings = () => {
                       checked={lowStockAlerts} onChange={(e)=> setLowStockAlerts(e.target.checked)}/>
                     </div>
                   </div>
-                  </div>
+                  </div>)}
+                 {showSection(["appearance", "theme", "language"])&& (
                   <div className='mt-6 bg-white rounded-2xl border border-gray-200 shadow-sm p-6'>
                     <div>
                       <h2 className='text-xl font-semibold text-slate-900'>Appearance Settings</h2>
@@ -150,7 +160,8 @@ const Settings = () => {
                         <option>Hindi</option>
                       </select>
                     </div>
-                  </div>
+                  </div>)}
+                 {showSection(["danger", "delete", "account"])&& (
                   <div className='mt-6 bg-white rounded-2xl border border-red-200 shadow-sm p-6'>
                     <div className='flex justify-between items-center'>
                       <div>
@@ -165,7 +176,7 @@ const Settings = () => {
                       </div>
                       <button onClick={()=> setIsDeletingAccount(true)} className='border border-red-300 text-red-600 px-4 py-2 rounded-lg hover:bg-red-50 transition'>Delete Account</button>
                     </div>
-                  </div>
+                  </div>)}
             </div>
         </div>
         <ConfirmModal isOpen={isDeletingAccount}

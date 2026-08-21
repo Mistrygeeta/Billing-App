@@ -3,6 +3,11 @@ import Sidebar from '../components/Sidebar/Sidebar'
 import Navbar  from '../components/Navbar/Navbar'
 const Profile = () => {
   const [showEdit, setShowEdit] = useState(false);
+  const [name, setName] = useState("Geeta Mistry");
+  const [email, setEmail] = useState("geeta@geeta.com");
+  const [editName, setEditName] = useState(name);
+  const [editEmail, setEditEmail] = useState(email);
+
   return (
     <div className='min-h-screen bg-gray-100 flex'>
         <Sidebar/>
@@ -18,12 +23,14 @@ const Profile = () => {
                       <span className='text-3xl font-semibold'>G</span>
                     </div>
                     <div>
-                      <h2 className='text-2xl font-semibold text-slate-900'>Geeta</h2>
+                      <h2 className='text-2xl font-semibold text-slate-900'>{name}</h2>
                       <p className='text-gray-500 mt-1'>Admin</p>
-                      <p className='text-sm text-gray-400 mt-1'>geeta@geeta.com</p>
+                      <p className='text-sm text-gray-400 mt-1'>{email}</p>
                     </div>
                   </div>
-                  <button onClick={()=> setShowEdit(true)} className='px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-700 transition'>Edit Profile</button>
+                  <button onClick={()=> {setEditName(name);
+                  setEditEmail(email);
+                  setShowEdit(true)}} className='px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-700 transition'>Edit Profile</button>
                 </div>
                </div>
                <div className='bg-white border border-gray-200 rounded-xl shadow-sm p-6 mt-6'>
@@ -32,11 +39,11 @@ const Profile = () => {
                 <div className='grid grid-cols-2 gap-6 mt-6'>
                   <div>
                     <label className='text-sm font-medium text-gray-600'>Full Name</label>
-                    <p className='mt-2 text-slate-900 font-medium'>Geeta Mistry</p>
+                    <p className='mt-2 text-slate-900 font-medium'>{name}</p>
                   </div>
                   <div>
                     <label className='text-sm font-medium text-gray-600'>Email Address</label>
-                    <p className='mt-2 text-slate-900 font-medium'>geeta@geeta.com</p>
+                    <p className='mt-2 text-slate-900 font-medium'>{email}</p>
                   </div>
                   <div>
                     <label className='text-sm font-medium text-gray-600'>Role</label>
@@ -97,7 +104,8 @@ const Profile = () => {
 
                     <input
                       type='text'
-                      defaultValue='Geeta Mistry'
+                      value={editName}
+                      onChange={(e)=> setEditName(e.target.value)}
                       className='w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-slate-300'
                     />
                   </div>
@@ -109,7 +117,8 @@ const Profile = () => {
 
                     <input
                       type='email'
-                      defaultValue='geeta@geeta.com'
+                      value={editEmail}
+                      onChange={(e)=> setEditEmail(e.target.value)}
                       className='w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-slate-300'
                     />
                   </div>
@@ -117,14 +126,16 @@ const Profile = () => {
 
                 <div className='flex justify-end gap-3 mt-6'>
                   <button
-                    onClick={() => setShowEdit(false)}
+                    onClick={() =>setShowEdit(false)}
                     className='px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50'
                   >
                     Cancel
                   </button>
 
                   <button
-                    onClick={() => setShowEdit(false)}
+                    onClick={() =>{setName(editName);
+                    setEmail(editEmail); 
+                    setShowEdit(false)}}
                     className='px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-700'
                   >
                     Save Changes
