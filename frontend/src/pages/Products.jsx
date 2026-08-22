@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Navbar from '../components/Navbar/Navbar';
 import Sidebar from '../components/Sidebar/Sidebar';
-import {FaPlus} from 'react-icons/fa'
+import {FaBoxOpen, FaPlus} from 'react-icons/fa'
 import Modal from '../components/Modal/Modal';
 import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
 
@@ -146,7 +146,51 @@ const resetForm = ()=>{
           <span>Add Product</span>
           </button>
       </div>
+      <div className='grid grid-cols-3 gap-6 mt-8'>
+        <div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6'>
+          <div className='flex justify-between items-center'>
+            <div>
+              <p className='text-sm text-gray-500'>Total Products</p>
+              <h3 className='text-2xl font-bold text-slate-900 mt-1'>{products.length}</h3>
+              <p className='text-sm text-blue-600 mt-1'>All Products</p>
+            </div>
+            <div className='w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center'>
+              <FaBoxOpen className='text-blue-600 text-xl'/>
+            </div>
+          </div>
+        </div>
+        <div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6'>
+          <div className='flex items-center justify-between'>
+            <div>
+              <p className='text-sm text-gray-500'>Categories</p>
+              <h3 className='text-2xl font-bold text-slate-900 mt-1'>{new Set(products.map(product => product.category)).size}</h3>
+              <p className='text-sm text-green-600 mt-1'>Product Categories</p>
+            </div>
+            <div className='w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center'>
+              <span className='text-green-600 text-xl font-bold'>#</span>
+            </div>
+          </div>
+        </div>
+        <div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6'>
+          <div className='flex justify-between items-center'>
+            <div>
+              <p className='text-sm text-gray-500 '>Total Stock</p>
+              <h3 className='text-2xl font-bold text-slate-900 mt-1'>{products.reduce((sum,product)=> sum + Number(product.stock), 0)}</h3>
+              <p className='text-xm text-orange-600 mt-1'>Available Quantity</p>
+            </div>
+            <div className='w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center'>
+              <FaBoxOpen className='text-orange-600 text-xl'/>
+            </div>
+          </div>
+        </div>
+      </div>
         <div className='mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden '>
+        <div className='px-6 py-5 border-b border-gray-200 flex justify-between items-center'>
+          <div>
+            <h3 className='text-xl font-bold text-slate-900'>Product List</h3>
+            <p className='text-sm text-gray-500 mt-1'>View and manage your products</p>
+          </div>
+        </div>
         <table className='w-full border-collapse'>
           <thead className='bg-slate-50'>
             <tr className='border-b'>

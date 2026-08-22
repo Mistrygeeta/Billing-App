@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
-import { FaPlus} from 'react-icons/fa';
+import { FaPlus, FaUsers} from 'react-icons/fa';
 import Modal from '../components/Modal/Modal';
 import ConfirmModal from '../components/ConfirmModal/ConfirmModal'
 
@@ -127,8 +127,54 @@ const cancelDelete = ()=>{
                 <FaPlus/>
                 <span>Add Customer</span>
               </button>
-          </div>
+              </div>
+              <div className='grid grid-cols-3 gap-6 mt-8'>
+                <div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6'>
+                  <div className='flex items-center justify-between'>
+                    <div>
+                      <p className='text-sm text-gray-500'>Total Customer</p>
+                      <h3 className='text-2xl font-bold text-slate-900 mt-1'>{customers.length}</h3>
+                      <p className='text-sm text-blue-600 mt-1'>All Customers</p>
+                    </div>
+                    <div className='w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center'> 
+                      <FaUsers className='text-blue-600 text-xl'/>
+                    </div>
+                  </div>
+                </div>
+                <div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6'>
+                  <div className='flex items-center justify-between'>
+                    <div>
+                      <p className='text-sm text-gray-500'>Email Available</p>
+                      <h3 className='text-2xl font-bold text-slate-900 mt-1'>{customers.filter(customer => customer.email).length}</h3>
+                      <p className='text-sm text-green-600 mt-1'>Contact Details</p>
+                    </div>
+                    <div className='w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center'>
+                      <span className='text-green-600 text-xl font-bold'>@</span>
+                    </div>
+                  </div>
+                </div>
+                <div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6'>
+                  <div className='flex items-center justify-between'>
+                    <div>
+                      <p className='text-sm text-gray-500'>Address Available</p>
+                      <h3 className='text-2xl font-bold text-slate-900 mt-1'>{customers.filter(customer => customer.address).length}</h3>
+                      <p className='text-sm text-orange-600 mt-1'>Customer Information</p>
+                    </div>
+                    <div className='w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center'>
+                      <span className='text-orange-600 text-xl font-bold'>⌖</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          
           <div className='mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden'>
+            <div className='px-6 py-5 border-b border-gray-200 flex justify-between items-center'>
+              <div>
+                <h3 className='text-xl font-bold text-slate-900'>Customer List</h3>
+                <p className='text-sm text-gray-500 mt-1'>View and manage your customers</p>
+              </div>
+              <span className='bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full text-sm font-medium'>{filteredCustomers.length} Customer</span>
+            </div>
             <table className='w-full border-collapse'>
               <thead className='bg-slate-50'>
                 <tr className='border-b border-gray-200'>
@@ -143,13 +189,24 @@ const cancelDelete = ()=>{
                 {filteredCustomers.length > 0 ?(
                 filteredCustomers.map(({customer, originalIndex})=>(
                 <tr key={originalIndex} className='border-b border-gray-100 hover:bg-gray-50 transition'>
-                  <td className='px-5 py-4'><span className='font-medium text-slate-900'>{customer.name}</span></td>
+                  <td className='px-5 py-4'>
+                    <div className='flex items-center gap-3'>
+                      <div className='w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center'>
+                        {customer.name.split(" ")
+                        .map(word => word[0]).join("")
+                      .slice(0,2).toUpperCase()}</div>
+                    <div>
+                      <p className='font-medium text-slate-900'>{customer.name}</p>
+                    </div>
+                    </div>
+                  </td>
                   <td className='px-5 py-4 text-gray-800'>{customer.phone}</td>
                   <td className='px-5 py-4 text-gray-600'>{customer.email} </td>
                   <td className='px-5 py-4 text-gray-800'>{customer.address} </td>
                   <td className='px-5 py-4'>
                     <div className='flex gap-2'>
-                      <button onClick={()=> handleEdit(originalIndex)} className='bg-blue-500 text-white rounded-md px-4 py-1 hover:bg-blue-600 transition'>
+                      <button onClick={()=> handleEdit(originalIndex)} 
+                      className='bg-blue-500 text-white border border-blue-200 rounded-md px-4 py-1 hover:bg-blue-600 transition'>
                         Edit
                       </button>
                       <button onClick={()=>handleDelete(originalIndex)} className='bg-red-500 text-white rounded-md px-4 py-1 hover:bg-red-600 transition'>
