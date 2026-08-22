@@ -1,10 +1,26 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {FaSearch, FaUserCircle,FaBell} from "react-icons/fa"
 import Logout from "../Auth/Logout";
 import { useNavigate } from "react-router-dom";
 const Navbar = (props) => {
   const [showProfile, setShowProfile] = useState(false);
-   const navigate = useNavigate();
+  const profileRef = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    const handleClickOutside = (e)=>{
+      if(profileRef.current && 
+        !profileRef.current.contains(e.target)
+      ){
+        setShowProfile(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return()=>{
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+  },[])
 
   return (
     <nav className="flex justify-between items-center h-16 px-8 bg-white shadow-sm sticky top-0 z-50">
@@ -19,7 +35,7 @@ const Navbar = (props) => {
         <FaBell className="text-gray-600 text-xl hover:text-slate-900 transition duration-200"/>
         {/* <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-red-500"></span> */}
         </div>
-        <div className="relative">
+        <div ref={profileRef} className="relative">
           <button onClick={()=> setShowProfile(!showProfile)}
           className="flex items-center gap-2 cursor-pointer">
             <FaUserCircle  className="text-2xl text-gray-700 cursor-pointer"/>
