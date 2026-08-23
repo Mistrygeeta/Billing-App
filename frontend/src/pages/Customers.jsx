@@ -128,6 +128,7 @@ const cancelDelete = ()=>{
                 <span>Add Customer</span>
               </button>
               </div>
+             {search ==="" && (
               <div className='grid grid-cols-3 gap-6 mt-8'>
                 <div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6'>
                   <div className='flex items-center justify-between'>
@@ -141,6 +142,7 @@ const cancelDelete = ()=>{
                     </div>
                   </div>
                 </div>
+                
                 <div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6'>
                   <div className='flex items-center justify-between'>
                     <div>
@@ -166,7 +168,7 @@ const cancelDelete = ()=>{
                   </div>
                 </div>
               </div>
-          
+          )} 
           <div className='mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden'>
             <div className='px-6 py-5 border-b border-gray-200 flex justify-between items-center'>
               <div>

@@ -146,7 +146,8 @@ const resetForm = ()=>{
           <span>Add Product</span>
           </button>
       </div>
-      <div className='grid grid-cols-3 gap-6 mt-8'>
+     {search === "" && (
+       <div className='grid grid-cols-3 gap-6 mt-8'>
         <div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6'>
           <div className='flex justify-between items-center'>
             <div>
@@ -184,6 +185,7 @@ const resetForm = ()=>{
           </div>
         </div>
       </div>
+      )}
         <div className='mt-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden '>
         <div className='px-6 py-5 border-b border-gray-200 flex justify-between items-center'>
           <div>

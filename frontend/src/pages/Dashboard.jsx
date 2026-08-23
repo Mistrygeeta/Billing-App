@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Sidebar from '../components/Sidebar/Sidebar'
 import Navbar from '../components/Navbar/Navbar';
 import StatCard from '../components/Dashboard/StatCard';
@@ -9,12 +9,14 @@ import RevenueChart from '../components/Dashboard/RevenueChart';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <Sidebar />
       <div className='ml-60 flex-1 flex flex-col'>
-        <Navbar />
+        <Navbar search={search} setSearch={setSearch} />
       <div className='p-6'>
        <div className='flex justify-between items-center'>
         <div>
@@ -72,10 +74,10 @@ const Dashboard = () => {
         </div>
         <div className='grid grid-cols-3 gap-6 mt-6 '>
           <div className='col-span-2'>
-            <RecentBills />
+            <RecentBills search={search} />
           </div>
           <div>
-            <RecentActivity />
+            <RecentActivity search={search} />
           </div>
         </div>
       </div>
