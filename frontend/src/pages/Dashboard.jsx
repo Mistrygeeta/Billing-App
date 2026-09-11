@@ -11,6 +11,13 @@ import { useNavigate } from 'react-router-dom';
 const Dashboard = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  const searchText = search.trim().toLowerCase();
+  const isSearching = searchText !== "";
+
+  const showProducts = !isSearching || "products".includes(searchText);
+  const showCustomers = !isSearching || "customer".includes(searchText);
+  const showBills = !isSearching || "bills".includes(searchText);
+  const showRevenue = !isSearching || "revenue".includes(searchText);
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
@@ -18,6 +25,7 @@ const Dashboard = () => {
       <div className='ml-60 flex-1 flex flex-col'>
         <Navbar search={search} setSearch={setSearch} />
       <div className='p-6'>
+        {!isSearching &&(
        <div className='flex justify-between items-center'>
         <div>
           <h1 className='text-3xl font-bold text-gray-800 '>Dashboard Overview</h1>
@@ -28,12 +36,22 @@ const Dashboard = () => {
           + New Invoice
         </button>
        </div>
+       )}
        <div className='grid grid-cols-4 gap-4 mt-3' >
+        {showProducts &&(
           <StatCard title= "Products" value="120" icon ={<FaBox/>} change="+8.2%"/>
+        )}
+        {showCustomers && (
           <StatCard title="Customers" value= "30" icon={<FaUsers />} change="+5.4%" />
+        )}  
+        {showBills && (
           <StatCard title="Bills" value ="500" icon ={<FaFileInvoiceDollar />} change="+12.5%" />
+        )}  
+        {showRevenue && (
           <StatCard  title="Revenue" value= "INR 50,000" icon= {<FaRupeeSign />} change="+18.7%" />
+        )}  
         </div>
+        {(!isSearching || showRevenue) &&(
         <div className='grid grid-cols-3 gap-6 mt-6'>
           <div className='col-span-2'>
           <RevenueChart/>
@@ -72,6 +90,8 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+        )}
+        {(!isSearching || showBills) &&(
         <div className='grid grid-cols-3 gap-6 mt-6 '>
           <div className='col-span-2'>
             <RecentBills search={search} />
@@ -80,6 +100,7 @@ const Dashboard = () => {
             <RecentActivity search={search} />
           </div>
         </div>
+        )}
       </div>
     </div>
     </div>
