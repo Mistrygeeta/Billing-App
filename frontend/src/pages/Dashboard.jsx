@@ -18,6 +18,9 @@ const Dashboard = () => {
   const showCustomers = !isSearching || "customer".includes(searchText);
   const showBills = !isSearching || "bills".includes(searchText);
   const showRevenue = !isSearching || "revenue".includes(searchText);
+  const showSummary = !isSearching || "summary sales".includes(searchText);
+  const showRecentBills = !isSearching || "bills recent bills invoice".includes(searchText);
+  const showRecentActivity = !isSearching || "activity recent activity".includes(searchText)
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
@@ -51,11 +54,13 @@ const Dashboard = () => {
           <StatCard  title="Revenue" value= "INR 50,000" icon= {<FaRupeeSign />} change="+18.7%" />
         )}  
         </div>
-        {(!isSearching || showRevenue) &&(
         <div className='grid grid-cols-3 gap-6 mt-6'>
+        {(!isSearching || showRevenue) &&(
           <div className='col-span-2'>
           <RevenueChart/>
           </div>
+        )}
+        {showSummary && (
           <div className='bg-white rounded-xl border border-gray-200 shadow-sm p-6'>
             <h2 className='text-lg font-semibold text-slate-900'>Sales Summary</h2>
             <p className='text-sm text-gray-500 mt-1'>This month's performance</p>
@@ -89,16 +94,20 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+          )}
         </div>
-        )}
-        {(!isSearching || showBills) &&(
+        {(showRecentBills || showRecentActivity) &&(
         <div className='grid grid-cols-3 gap-6 mt-6 '>
+          {showRecentBills && (
           <div className='col-span-2'>
             <RecentBills search={search} />
           </div>
+          )}
+          {showRecentActivity &&(
           <div>
             <RecentActivity search={search} />
           </div>
+          )}
         </div>
         )}
       </div>
