@@ -14,12 +14,40 @@ const Dashboard = () => {
   const searchText = search.trim().toLowerCase();
   const isSearching = searchText !== "";
 
+  const bills = [
+  {
+    invoiceNo: "INV001",
+    customer: "Rahul",
+    amount: "INR 500",
+    status: "Paid",
+  },
+  {
+    invoiceNo: "INV002",
+    customer: "Aman",
+    amount: "INR 200",
+    status: "Pending",
+  },
+  {
+    invoiceNo: "INV003",
+    customer: "Mukesh",
+    amount: "INR 1200",
+    status: "Unpaid",
+  },
+];
+
+const hasBillMatch = bills.some((bill) =>
+  bill.invoiceNo.toLowerCase().includes(searchText) ||
+  bill.customer.toLowerCase().includes(searchText) ||
+  bill.amount.toLowerCase().includes(searchText) ||
+  bill.status.toLowerCase().includes(searchText)
+);
+
   const showProducts = !isSearching || "products".includes(searchText);
   const showCustomers = !isSearching || "customer".includes(searchText);
   const showBills = !isSearching || "bills".includes(searchText);
   const showRevenue = !isSearching || "revenue".includes(searchText);
   const showSummary = !isSearching || "summary sales".includes(searchText);
-  const showRecentBills = !isSearching || "bills recent bills invoice".includes(searchText);
+  const showRecentBills = !isSearching || "bills recent bills invoice".includes(searchText) || hasBillMatch;
   const showRecentActivity = !isSearching || "activity recent activity".includes(searchText)
 
   return (
@@ -100,7 +128,7 @@ const Dashboard = () => {
         <div className='grid grid-cols-3 gap-6 mt-6 '>
           {showRecentBills && (
           <div className='col-span-2'>
-            <RecentBills search={search} />
+            <RecentBills search={search} bills={bills} />
           </div>
           )}
           {showRecentActivity &&(

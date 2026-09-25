@@ -1,26 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-const RecentBills = ({search}) => {
-  const bills = [
-  {
-    invoiceNo: "INV001",
-    customer: "Rahul",
-    amount: "INR 500",
-    status: "Paid",
-  },
-  {
-    invoiceNo: "INV002",
-    customer: "Aman",
-    amount: "INR 200",
-    status: "Pending",
-  },
-  {
-    invoiceNo: "INV003",
-    customer: "Mukesh",
-    amount: "INR 1200",
-    status: "Unpaid",
-  },
-];
+const RecentBills = ({search, bills}) => {
+  
 
 const filteredBills = bills.filter((bill)=>
 bill.invoiceNo.toLowerCase().includes(search.toLowerCase()) ||
