@@ -42,13 +42,33 @@ const hasBillMatch = bills.some((bill) =>
   bill.status.toLowerCase().includes(searchText)
 );
 
+const activities = [
+  {
+    title: "Invoice Created",
+    type: "invoice",
+  },
+  {
+    title: "New Customer Added",
+    type: "customer",
+  },
+  {
+    title: "Payment Received",
+    type: "payment",
+  },
+];
+
+const hasActivityMatch = activities.some((activity) =>
+  activity.title.toLowerCase().includes(searchText) ||
+  activity.type.toLowerCase().includes(searchText)
+);
+
   const showProducts = !isSearching || "products".includes(searchText);
   const showCustomers = !isSearching || "customer".includes(searchText);
   const showBills = !isSearching || "bills".includes(searchText);
   const showRevenue = !isSearching || "revenue".includes(searchText);
   const showSummary = !isSearching || "summary sales".includes(searchText);
   const showRecentBills = !isSearching || "bills recent bills invoice".includes(searchText) || hasBillMatch;
-  const showRecentActivity = !isSearching || "activity recent activity".includes(searchText)
+  const showRecentActivity = !isSearching || "activity recent activity".includes(searchText) || hasActivityMatch;
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
