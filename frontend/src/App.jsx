@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom'
 import './App.css'
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -19,6 +19,7 @@ function App() {
   return (
    <BrowserRouter>
    <Routes>
+    <Route path='/' element={<Navigate to='/login' replace/>}/>
     <Route path='/view-bill/:id' element={<ViewBill/>}/>
     <Route path='/create-bill' element={<CreateBill/>}/>
     <Route path='/edit-bill/:id' element={<CreateBill/>}/>

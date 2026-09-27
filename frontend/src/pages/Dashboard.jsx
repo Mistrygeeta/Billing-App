@@ -67,7 +67,7 @@ const hasActivityMatch = activities.some((activity) =>
   const showBills = !isSearching || "bills".includes(searchText);
   const showRevenue = !isSearching || "revenue".includes(searchText);
   const showSummary = !isSearching || "summary sales".includes(searchText);
-  const showRecentBills = !isSearching || "bills recent bills invoice".includes(searchText) || hasBillMatch;
+  const showRecentBills = !isSearching || "bills recent bills".includes(searchText) || hasBillMatch;
   const showRecentActivity = !isSearching || "activity recent activity".includes(searchText) || hasActivityMatch;
 
   return (
