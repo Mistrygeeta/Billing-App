@@ -45,6 +45,8 @@ async function login(req, res) {
         const {email, password} = req.body
 
         const user = await userModel.findOne({email});
+        console.log("Login Email:", email);
+        console.log("User Found:", user);
 
         if(!user){
             return res.status(404).json({

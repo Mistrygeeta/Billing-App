@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaCheckCircle, FaEnvelope,FaLock,FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import api from "../api/api";
 
 
 const Login = () => {
@@ -18,7 +19,7 @@ const Login = () => {
         setPassword(event.target.value)
     }
 
-    const handleLogin = ()=>{
+    const handleLogin = async()=>{
       if (email === "" && password ==="") {
         alert("email and password are required")
       }else if(email === ""){
@@ -26,11 +27,21 @@ const Login = () => {
       }else if(password === ""){
         alert("password is required")
       }else {
-       console.log("Login succesful");
-       console.log("email :", email);
-       console.log("password :", password);
+       try {
+        const response = await api.post("/auth/login",{
+          email,
+          password
+        });
+        console.log("Login Response:", response.data);
 
-       navigate("/dashboard");
+        localStorage.setItem("token", response.data.token);
+
+        navigate("/dashboard");
+
+       } catch (error) {
+        console.log("Login Error", error);
+        alert(error.response?.data?.message || "login Failed");
+       }
       }
     }
   return (

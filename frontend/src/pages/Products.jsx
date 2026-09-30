@@ -4,6 +4,8 @@ import Sidebar from '../components/Sidebar/Sidebar';
 import {FaBoxOpen, FaPlus} from 'react-icons/fa'
 import Modal from '../components/Modal/Modal';
 import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
+import api from '../api/api';
+import { useEffect } from 'react';
 
 const Products = () => {
   const [search, setSearch] = useState("");
@@ -11,6 +13,25 @@ const Products = () => {
   const [editIndex, setEditIndex] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
+
+ useEffect(() => {
+  const fetchProducts = async () => {
+    try{
+    const token = localStorage.getItem("token");
+
+    const response = await api.get("/product/get-products",{
+    headers : {
+    Authorization : `Bearer ${token}`,
+    }
+    });
+    console.log("Products API Response:", response.data);
+ }catch(error){
+  console.log("Products API Error:", error)
+ }
+  };
+
+  fetchProducts();
+}, []);
 
   const [productData, setProductData] = useState({
     name: "",
