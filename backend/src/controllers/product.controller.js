@@ -1,7 +1,6 @@
 const productModel = require("../models/product.model");
 
 
-
 async function addProduct(req, res) {
     try {
         const{name, price, stock, category} = req.body;

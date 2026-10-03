@@ -11,6 +11,7 @@ app.use(express.json());
 
 app.use("/api/auth",authRouter);
 app.use("/api/product",productRouter);
+console.log("PRODUCT ROUTE LOADED");
 app.use("/api/invoice",invoiceRouter)
 app.use("/api/dashboard",dashboardRouter);
 module.exports = app;
