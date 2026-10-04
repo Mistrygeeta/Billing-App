@@ -13,6 +13,7 @@ const Products = () => {
   const [editIndex, setEditIndex] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
+  const [products, setProducts] = useState([]);
 
  useEffect(() => {
   const fetchProducts = async () => {
@@ -25,6 +26,8 @@ const Products = () => {
     }
     });
     console.log("Products API Response:", response.data);
+
+    setProducts(response.data.products)
  }catch(error){
   console.log("Products API Error:", error)
  }
@@ -39,32 +42,7 @@ const Products = () => {
     price: "",
     stock: "",
   });
-  const [products, setProducts] = useState([
-     {
-    name: "Sample Product",
-    category: "Electronics",
-    price: "INR 1000",
-    stock: 10,
-  },
-  {
-    name: "Laptop",
-    category: "Electronics",
-    price: "INR 55000",
-    stock: 8,
-  },
-  {
-    name: "Wireless Mouse",
-    category: "Accessories",
-    price: "INR 800",
-    stock: 25,
-  },
-  {
-    name: "Keyboard",
-    category: "Accessories",
-    price: "INR 1200",
-    stock: 15,
-  },
-  ])
+  
   
 const handleChange =(e)=>{
 setProductData({
@@ -72,7 +50,7 @@ setProductData({
 });
 };
 
-const handleSubmitProduct =()=>{
+const handleSubmitProduct = async ()=>{
   if(
     !productData.name|| !productData.category || !productData.price || !productData.stock
   ){
@@ -82,16 +60,40 @@ const handleSubmitProduct =()=>{
   const newProduct ={
     name: productData.name,
     category: productData.category,
-    price: `INR ${productData.price}`,
+    price: Number(productData.price),
     stock: Number(productData.stock),
   };
+  const token = localStorage.getItem("token");
+
+  let response;
+
+  if(editIndex !== null){
+    const productId = products[editIndex]._id;
+
+    response = await api.put(`/product/update-product/${productId}`,
+      newProduct,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    console.log("Update Product Response:",response.data);
+  }else{
+   response = await api.post("/product/add-product", newProduct,{
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+  console.log("Add Product Response:", response.data);
+  };
+  
   if (editIndex !== null) {
     const updatedProducts = [...products];
-    updatedProducts[editIndex]= newProduct;
+    updatedProducts[editIndex]= response.data.updatedproduct;
     setProducts(updatedProducts);
     setEditIndex(null)
   } else {
-    setProducts([...products, newProduct])
+    setProducts([...products, response.data.product])
   };
 
   setProductData({
@@ -124,7 +126,7 @@ const handleEditProduct = (index)=>{
 setProductData({
   name: products[index].name,
   category: products[index].category,
-  price: products[index].price.replace("INR", "").trim(),
+  price: products[index].price,
   stock: products[index].stock
 });
 
@@ -230,7 +232,7 @@ const resetForm = ()=>{
             <tr key={originalIndex} className="border-b hover:bg-gray-50 transition">
              <td className="px-5 py-4"><span className='font-medium text-slate-900'>{product.name}</span></td>
              <td className="px-5 py-4 text-gray-700">{product.category}</td>
-             <td className="px-5 py-4 text-gray-700">{product.price} </td>
+             <td className="px-5 py-4 text-gray-700">Rs.{product.price} </td>
              <td className="px-5 py-4">{product.stock>10 ?(
               <span className='bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium '>{product.stock} In Stock</span>
              ): product.stock>0 ?(
