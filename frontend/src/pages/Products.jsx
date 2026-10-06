@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar/Navbar';
 import Sidebar from '../components/Sidebar/Sidebar';
 import {FaBoxOpen, FaPlus} from 'react-icons/fa'
 import Modal from '../components/Modal/Modal';
 import ConfirmModal from '../components/ConfirmModal/ConfirmModal';
 import api from '../api/api';
-import { useEffect } from 'react';
 
 const Products = () => {
   const [search, setSearch] = useState("");
@@ -110,11 +109,31 @@ const handleDeleteProduct = (index)=>{
   setShowDeleteModal(true);
 };
 
-const confirmDeleteProduct =()=>{
-  const updatedProducts = products.filter((_, i) => i !== deleteIndex );
-  setProducts(updatedProducts);
-  setDeleteIndex(null);
-  setShowDeleteModal(false);
+const confirmDeleteProduct =async()=>{
+ try {
+  const productId = products[deleteIndex]._id;
+  const token = localStorage.getItem("token");
+
+  const response = await api.delete(`/product/delete-product/${productId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  console.log("Delete Product Response:", response.data);
+
+  const updatedProducts = products.filter(
+      (_, i) => i !== deleteIndex
+    );
+
+    setProducts(updatedProducts);
+    setDeleteIndex(null);
+    setShowDeleteModal(false);
+ } catch (error) {
+  console.log("Delete Product Error", error);
+  alert("Failed to delete product");
+ }
 };
 
 const cancelDelete = ()=>{
@@ -187,7 +206,7 @@ const resetForm = ()=>{
           <div className='flex items-center justify-between'>
             <div>
               <p className='text-sm text-gray-500'>Categories</p>
-              <h3 className='text-2xl font-bold text-slate-900 mt-1'>{new Set(products.map(product => product.category)).size}</h3>
+              <h3 className='text-2xl font-bold text-slate-900 mt-1'>{new Set(products.map(product => product.category.toLowerCase())).size}</h3>
               <p className='text-sm text-green-600 mt-1'>Product Categories</p>
             </div>
             <div className='w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center'>
@@ -229,7 +248,7 @@ const resetForm = ()=>{
 
           <tbody>
             {filteredProducts.length > 0 ?(filteredProducts.map(({product, originalIndex}) =>(
-            <tr key={originalIndex} className="border-b hover:bg-gray-50 transition">
+            <tr key={product._id} className="border-b hover:bg-gray-50 transition">
              <td className="px-5 py-4"><span className='font-medium text-slate-900'>{product.name}</span></td>
              <td className="px-5 py-4 text-gray-700">{product.category}</td>
              <td className="px-5 py-4 text-gray-700">Rs.{product.price} </td>
