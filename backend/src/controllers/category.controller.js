@@ -25,4 +25,23 @@ try {
 }
 };
 
-module.exports = {addCategory};
+
+async function getCategory(req, res) {
+    try {
+        const categories = await categoryModel.find({
+            user: req.user.id
+        }).sort({name: 1});
+
+        res.status(200).json({
+            message : "Categories fetched successfully",
+            categories
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            Error: error.message
+        })
+    }
+};
+
+module.exports = {addCategory, getCategory};
