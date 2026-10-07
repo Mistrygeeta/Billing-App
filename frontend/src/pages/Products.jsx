@@ -13,6 +13,7 @@ const Products = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([])
 
  useEffect(() => {
   const fetchProducts = async () => {
@@ -34,6 +35,26 @@ const Products = () => {
 
   fetchProducts();
 }, []);
+
+useEffect(()=>{
+const fetchCategories = async()=>{
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.get("/category/get-categories",{
+      headers :{
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    console.log("Categories API Response:", response.data);
+
+    setCategories(response.data.categories);
+  } catch (error) {
+    console.log("Categories API Error:", error);
+  }
+};
+
+fetchCategories();
+},[])
 
   const [productData, setProductData] = useState({
     name: "",
@@ -303,10 +324,9 @@ const resetForm = ()=>{
             <select name='category' value={productData.category} onChange={handleChange}
             className='w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-slate-900'>
               <option value="">Select Category</option>
-              <option value="Grocery">Grocery</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Stationary">Stationary</option>
-              <option value="Accessories">Accessories</option>
+              {categories.map((category)=>(
+                <option key={category._id} value={category.name}>{category.name}</option>
+              ))}
             </select>
           </div>
           <div className='mt-4'>
