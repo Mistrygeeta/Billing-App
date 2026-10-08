@@ -44,11 +44,11 @@ async function getAllInvoice(req, res) {
             user: req.user.id
         }).populate("products.product");
 
-        if(invoice.length === 0){
-            return res.status(404).json({
-                message: "invoice not found"
-            })
-        };
+        // if(invoice.length === 0){
+        //     return res.status(404).json({
+        //         message: "invoice not found"
+        //     })
+        // };
 
         return res.status(200).json({
             message: "invoice fetch successfully",

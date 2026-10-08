@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import api from '../api/api';
 import Sidebar from '../components/Sidebar/Sidebar';
 import Navbar from '../components/Navbar/Navbar';
 import {FaClock, FaEdit, FaEye, FaFileInvoiceDollar, FaPlus, FaRupeeSign} from 'react-icons/fa';
@@ -12,9 +13,22 @@ const Bills = () => {
   const [search, setSearch] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedBillIndex, setSelectedBillIndex] = useState(null);
+
   useEffect(()=>{
-    const savedBills = JSON.parse(localStorage.getItem("bills")) || [];
-    setBills(savedBills);
+    const fetchBills = async()=>{
+      try {
+        const response = await api.get("/invoice/get-invoices",{
+          headers :{
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+        console.log("Bills response:", response.data);
+        setBills(response.data.invoice);
+      } catch (error) {
+        console.log("Error fetching bills:", error)
+      }
+    }
+    fetchBills();
   },[]);
 
   const filteredBills = bills.map((bill,index)=>({bill, originalIndex: index}))
